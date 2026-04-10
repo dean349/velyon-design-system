@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoja de Liquidacion / Completion Statement â€“ Los Romeros Limited</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080c14;--surface:#0d1220;--surface2:#111827;--border:rgba(255,255,255,0.08);--text:#f0f4ff;--muted:#6b7a99;--accent:#4f8ef7;--red:#f87171;--green:#34d399;--yellow:#fbbf24}
+body{background:var(--bg);background-image:radial-gradient(at 20% 0,rgba(79,142,247,0.07) 0,transparent 50%),radial-gradient(at 80% 100%,rgba(52,211,153,0.04) 0,transparent 50%);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+.page{max-width:960px;margin:0 auto;padding:3rem 2rem}
+header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:3rem}
+.logo-area img{height:48px;width:auto;opacity:.92;filter:drop-shadow(0 0 12px rgba(79,142,247,0.3))}
+.ref-area{text-align:right}
+.ref-area .label{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:600}
+.ref-area .val{font-family:monospace;font-size:.78rem;color:var(--muted);margin-top:.2rem}
+.badge-live{display:inline-flex;align-items:center;gap:.4rem;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:600;margin-bottom:.4rem}
+.badge-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:2.6rem;font-weight:300;color:rgba(240,244,255,.7);line-height:1.15;margin-bottom:.5rem}
+h1 span{font-weight:700;color:#fff}
+.subtitle{color:var(--muted);font-size:1.05rem;max-width:580px;margin-bottom:3rem}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:1rem;padding:1.8rem;margin-bottom:3rem}
+@media(max-width:700px){.meta-grid{grid-template-columns:1fr 1fr}.meta-grid>div:last-child{grid-column:span 2}}
+.meta-item .key{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-weight:600;margin-bottom:.4rem}
+.meta-item .val{font-size:.9rem;font-weight:500;color:#fff;line-height:1.4}
+.meta-item .sub{font-size:.78rem;color:var(--muted);margin-top:.2rem}
+section{margin-bottom:3rem}
+.section-header{display:flex;align-items:center;gap:.75rem;border-bottom:1px solid var(--border);padding-bottom:.85rem;margin-bottom:1.25rem}
+.section-num{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;flex-shrink:0}
+.section-title{font-size:1.1rem;font-weight:600}
+.table-wrap{border:1px solid var(--border);border-radius:.9rem;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead tr{background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border)}
+th{padding:.9rem 1.3rem;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;text-align:left}
+th.right{text-align:right}
+tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.02)}
+td{padding:1.1rem 1.3rem;vertical-align:top}
+.td-label{font-weight:500;color:#fff;margin-bottom:.3rem}
+.td-sub{font-size:.78rem;color:var(--muted);line-height:1.5}
+.chip{display:inline-block;font-size:.6rem;padding:.2rem .55rem;border-radius:4px;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;vertical-align:middle;margin-left:.5rem}
+.amount{text-align:right;white-space:nowrap}
+.amount .num{font-family:monospace;font-size:.95rem;font-weight:500}
+.amount.green .num{color:var(--green)}
+.amount.red .num{color:var(--red)}
+.amount.muted .num{color:var(--muted);font-style:italic;font-size:.8rem;letter-spacing:.05em}
+tfoot tr{background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.1)}
+tfoot.green-foot tr{background:rgba(52,211,153,0.05);border-top-color:rgba(52,211,153,0.2)}
+tfoot.red-foot tr{background:rgba(248,113,113,0.05);border-top-color:rgba(248,113,113,0.2)}
+.tfoot-label{padding:1rem 1.3rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+.tfoot-val{padding:1rem 1.3rem;text-align:right;font-family:monospace;font-size:1.3rem;font-weight:700}
+.tfoot-val.green{color:var(--green)}
+.tfoot-val.red{color:var(--red)}
+.final-box{background:linear-gradient(135deg,rgba(79,142,247,0.12) 0%,rgba(79,142,247,0.03) 100%);border:1px solid rgba(79,142,247,0.25);border-radius:1rem;padding:2.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;position:relative;overflow:hidden;margin-bottom:3rem}
+.final-box::before{content:'';position:absolute;left:0;top:0;height:100%;width:3px;background:linear-gradient(180deg,var(--accent),rgba(79,142,247,0.2));box-shadow:0 0 15px rgba(79,142,247,0.5)}
+.final-box .left .eyebrow{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);font-weight:700;margin-bottom:.5rem}
+.final-box .left h2{font-size:1.5rem;font-weight:300;color:#fff;line-height:1.2}
+.final-box .left p{font-size:.82rem;color:var(--muted);margin-top:.4rem;max-width:340px}
+.final-box .right .amount-big{font-family:monospace;font-size:3rem;font-weight:700;background:linear-gradient(135deg,#fff 30%,rgba(255,255,255,.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+@media(max-width:600px){.final-box{flex-direction:column}.final-box .right .amount-big{font-size:2.2rem}}
+.warning-box{border:1px solid rgba(248,113,113,0.3);border-radius:1rem;background:linear-gradient(135deg,rgba(248,113,113,0.08),rgba(248,113,113,0.03));padding:2rem;position:relative;overflow:hidden;margin-bottom:3rem}
+.warning-box::before{content:'';position:absolute;left:0;top:0;height:100%;width:4px;background:var(--red);box-shadow:0 0 20px rgba(248,113,113,0.4)}
+.warn-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.warn-icon{width:40px;height:40px;border-radius:50%;background:rgba(248,113,113,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.warn-head h3{font-size:1.1rem;font-weight:600}
+.warn-body p{color:rgba(240,244,255,.8);font-size:.88rem;line-height:1.7;margin-bottom:1rem}
+.scenarios{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.06);border-radius:.75rem;padding:1.3rem 1.5rem;margin:1.2rem 0;display:flex;flex-direction:column;gap:1rem}
+.scenario{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.scenario:last-child{border-bottom:none;padding-bottom:0}
+.sc-left .sc-name{font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot.blue{background:var(--accent)}
+.dot.red{background:var(--red)}
+.sc-left .sc-sub{font-size:.75rem;color:var(--muted)}
+.sc-right{font-family:monospace;font-size:.98rem;font-weight:600;white-space:nowrap;margin-left:1rem}
+.sc-right.red-val{color:var(--red)}
+.recommendation{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-left:3px solid var(--accent);border-radius:.5rem;padding:1rem 1.2rem;font-size:.85rem;font-weight:500;color:#fff;line-height:1.5}
+footer{text-align:center;border-top:1px solid var(--border);padding-top:2rem;margin-top:1rem}
+footer p{font-size:.75rem;color:var(--muted);margin-bottom:.3rem}
+
+.premium-glow {
+    box-shadow: 0 0 20px rgba(255,255,255,0.05);
+}
+.btn-print {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    text-transform: uppercase;
+}
+.btn-print:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.25);
+    color: #ffffff;
+    box-shadow: 0 0 18px rgba(255,255,255,0.08);
+}
+.btn-print:active {
+    transform: scale(0.97);
+}
+@media print {
+    .no-print { display: none !important; }
+    body {
+        background: #ffffff !important;
+        background-image: none !important;
+        color: #111111 !important;
+        padding: 0 !important;
+    }
+    .glass-panel {
+        background: #f9f9f9 !important;
+        backdrop-filter: none !important;
+        border: 1px solid #e0e0e0 !important;
+        box-shadow: none !important;
+    }
+    .premium-glow { box-shadow: none !important; }
+    h1, h2, h3, p, td, th, span, li { color: #111111 !important; }
+    .text-red-400, .text-red-300 { color: #c0392b !important; }
+    .text-muted-foreground { color: #555555 !important; }
+    footer { border-top: 1px solid #e0e0e0 !important; }
+    section { break-inside: avoid; }
+}
+        .btn-print {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 0.5rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        .btn-print:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: #fff !important; background-image: none !important; color: #000 !important; }
+            .glass-panel { background: none !important; border: 1px solid #ccc !important; backdrop-filter: none !important; box-shadow:none !important; }
+            .text-white { color: #000 !important; }
+            .text-white/90 { color: #000 !important; }
+            .text-muted-foreground { color: #000 !important; }
+            .text-red-400 { color: #d32f2f !important; }
+            .border-white\/10 { border-color: #e5e5e5 !important; }
+            .border-white\/5 { border-color: #e5e5e5 !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="logo-area">
+      <img src="velyon-logo-web-site-image.png" alt="Velyon Legal Command Center">
+    </div>
+    <div class="ref-area">
+      <div class="badge-live">Legal Command Center</div>
+      <div class="label">Document Reference</div>
+      <div class="val">VLY-LR-2026-04</div>
+      <button id="btn-export-pdf" class="btn-print no-print" onclick="window.print()" title="Export as PDF" aria-label="Export document as PDF">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Export PDF
+      </button>
+    </div>
+  </header>
+
+  <h1>HOJA DE LIQUIDACIÃ“N<br><span>COMPLETION STATEMENT</span></h1>
+  <p class="subtitle">Certified breakdown of financials and tax liabilities prior to Notary execution of the Escritura de Compraventa.</p>
+
+  <div class="meta-grid">
+    <div class="meta-item"><div class="key">Date of Preparation</div><div class="val">20 March 2026</div></div>
+    <div class="meta-item"><div class="key">Seller / Grantor</div><div class="val">Los Romeros Limited</div><div class="sub">Directors: Philip & Beryl Harrison</div></div>
+    <div class="meta-item"><div class="key">Buyer / Optant</div><div class="val">Miss Bernadette Mary Thompson</div><div class="sub">Irish Passport PW0112524</div></div>
+    <div class="meta-item"><div class="key">Property</div><div class="val">Villa 85, Shangrila Park</div><div class="sub">Calle Suiza, Playa Blanca, Lanzarote<br>Plot 154 MontaÃ±a Roja</div></div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section>
+    <div class="section-header"><div class="section-num">1</div><div class="section-title">Funds Due to Seller â€” Credits</div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Description</th><th class="right">Amount</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="td-label">Agreed Gross Purchase Price</div><div class="td-sub">Per Option to Buy contract signed 26 January 2026 at Arrecife, Lanzarote.</div></td>
+            <td class="amount green"><div class="num">â‚¬315,000.00</div></td>
+          </tr>
+        </tbody>
+        <tfoot class="green-foot"><tr><td class="tfoot-label">Total Credits</td><td class="tfoot-val green">â‚¬315,000.00</td></tr></tfoot>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section>
+    <div class="section-header"><div class="section-num">2</div><div class="section-title">Deductions & Withholdings â€” Debits</div></div>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem;padding-left:.1rem">Amounts already received by seller's representatives prior to completion, plus statutory deductions withheld from the final purchase price.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Description</th><th class="right">Amount</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="td-label">Advance Option Payment<span class="chip">Estate Agent</span></div><div class="td-sub">Paid directly by buyer to <strong>Lanzarote Investments</strong> for real estate mediation prior to contract execution.</div></td>
+            <td class="amount red"><div class="num">-â‚¬3,150.00</div></td>
+          </tr>
+          <tr>
+            <td><div class="td-label">Balance of Option Funds<span class="chip">Escrow</span></div><div class="td-sub">Held in Banca March client account (IBAN: ES48 0061 0173 2601 5249 0112) by depositary law firm <strong>Izquierdo y de la Cueva SCProf</strong>. Released simultaneously to seller upon Title Deed signing.*</div></td>
+            <td class="amount red"><div class="num">-â‚¬28,350.00</div></td>
+          </tr>
+          <tr>
+            <td><div class="td-label">3% Non-Resident Tax Retention<span class="chip">Statutory</span></div><div class="td-sub">Mandatory AEAT withholding per Spanish tax law. Retained by buyer and paid directly to the Spanish Tax Authority via <strong>Modelo 211</strong> on the seller's behalf to offset non-resident capital gains tax liability.</div></td>
+            <td class="amount red"><div class="num">-â‚¬9,450.00</div></td>
+          </tr>
+          <tr>
+            <td><div class="td-label">Spanish Notary Fees</div><div class="td-sub">Due to Notary <strong>JosÃ© Miguel de Lamo Iglesias</strong> â€” two invoices per the file.</div></td>
+            <td class="amount red"><div class="num">-â‚¬474.86</div></td>
+          </tr>
+          <tr>
+            <td><div class="td-label">Remaining Estate Agent Commission</div><div class="td-sub">Any balance owed to <strong>Lanzarote Investments</strong> beyond the initial â‚¬3,150.00 base payment. Per contract, deducted from purchase price upon execution of option rights.</div></td>
+            <td class="amount muted"><div class="num">TBD</div></td>
+          </tr>
+        </tbody>
+        <tfoot class="red-foot"><tr><td class="tfoot-label">Total Debits <span style="font-weight:400;font-size:.65rem;color:var(--muted);text-transform:lowercase;letter-spacing:0"> (excl. remaining agent commission)</span></td><td class="tfoot-val red">-â‚¬41,424.86</td></tr></tfoot>
+      </table>
+    </div>
+    <p style="font-size:.72rem;color:var(--muted);font-style:italic;margin-top:.75rem;padding-left:.2rem">*Note: The â‚¬28,350.00 escrow funds will be released by Izquierdo y de la Cueva SCProf simultaneously to Los Romeros Limited upon signing of the Title Deeds.</p>
+  </section>
+
+  <!-- SECTION 3 FINAL BALANCE -->
+  <div class="final-box">
+    <div class="left">
+      <div class="eyebrow">Completion Final Balance</div>
+      <h2>Amount Due at<br>Notary Signing</h2>
+      <p>Buyer must present this balance via guaranteed Banker's Draft (Cheque Bancario) to Los Romeros Limited at the Notary's office.</p>
+    </div>
+    <div class="right">
+      <div class="amount-big">â‚¬273,575.14</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 UK FEES -->
+  <section>
+    <div class="section-header">
+      <svg style="flex-shrink:0;opacity:.5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+      <div class="section-title">Off-Statement Disbursements â€” UK Jurisdiction</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Description</th><th class="right">Amount</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="td-label">Wincham International Limited â€” UK Legal & Documentation Fees</div><div class="td-sub">Â£6,000.00 â€” Corporate legal fees &nbsp;|&nbsp; Â£3,600.00 â€” Preparation of UK company documents in English and Spanish.<br>Invoiced to Los Romeros Limited. Paid via BACS to UK Sterling Tide Account, Clearbank Ltd.</div></td>
+            <td class="amount" style="white-space:nowrap"><div class="num" style="color:#fff;font-family:monospace;font-size:.98rem;font-weight:600">Â£9,600.00 GBP</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ADVISORY WARNING -->
+  <div class="warning-box">
+    <div class="warn-head">
+      <div class="warn-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+      </div>
+      <h3>Urgent Advisory â€” Modelo 210 Tax Exposure</h3>
+    </div>
+    <div class="warn-body">
+      <p>To the Directors of <strong>Los Romeros Limited (Philip & Beryl Harrison)</strong>:</p>
+      <p>The <strong>â‚¬9,450.00 (3%) withheld by the buyer</strong> is held on account for potential Capital Gains Tax via Modelo 211. This amount is <strong>insufficient</strong> to cover the historical tax arrears arising from the failure to file and pay the mandatory annual <strong>Modelo 210</strong> (Non-Resident Imputed Income Tax, charged at 24% on Market Rental Value for empty corporate-held Spanish property). The 4-year statute of limitations protects 2020 and 2021; however, the exposed period runs from <strong>2022 through Q1 2026</strong>.</p>
+
+      <div class="scenarios">
+        <div class="scenario">
+          <div class="sc-left"><div class="sc-name"><span class="dot blue"></span>Base Unpaid Debt</div><div class="sc-sub">Principal arrears only, excl. all penalties and interest</div></div>
+          <div class="sc-right">â‚¬13,821.84</div>
+        </div>
+        <div class="scenario">
+          <div class="sc-left"><div class="sc-name"><span class="dot blue"></span>Scenario A â€” Voluntary Filing</div><div class="sc-sub">File late returns before AEAT flags the sale. Penalty surcharge capped at ~â‚¬2,073.</div></div>
+          <div class="sc-right">~â‚¬15,895</div>
+        </div>
+        <div class="scenario">
+          <div class="sc-left"><div class="sc-name"><span class="dot red"></span>Scenario B â€” Audit / Demand Letter</div><div class="sc-sub">Wait for AEAT to issue a demand. Statutory penalties of 50â€“150% apply (â‚¬6,910â€“â‚¬20,732).</div></div>
+          <div class="sc-right red-val">â‚¬20,732 â€“ â‚¬34,554</div>
+        </div>
+      </div>
+
+      <div class="recommendation">Recommendation: We advise proceeding immediately with Voluntary Filing to limit exposure to ~â‚¬15,895. Wincham Spanish Services SL has legally absolved itself of liability for non-payment; the Spanish Tax Authority retains the right to pursue the Directors personally for any shortfall once the 3% retention is exhausted.</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong style="color:rgba(240,244,255,.5)">HIGHLY CONFIDENTIAL</strong> â€” Privileged Legal & Tax Document</p>
+    <p>&copy; 2026 Velyon Legal Command Center &nbsp;|&nbsp; Ref: VLY-LR-2026-04</p>
+  </footer>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELYON - UX/UI Design System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        background: 'var(--background)',
+                        foreground: 'var(--foreground)',
+                        card: 'var(--card)',
+                        cardForeground: 'var(--card-foreground)',
+                        popover: 'var(--popover)',
+                        primary: 'var(--primary)',
+                        primaryForeground: 'var(--primary-foreground)',
+                        secondary: 'var(--secondary)',
+                        secondaryForeground: 'var(--secondary-foreground)',
+                        muted: 'var(--muted)',
+                        mutedForeground: 'var(--muted-foreground)',
+                        accent: 'var(--accent)',
+                        accentForeground: 'var(--accent-foreground)',
+                        destructive: 'var(--destructive)',
+                        destructiveForeground: 'var(--destructive-foreground)',
+                        border: 'var(--border)',
+                        input: 'var(--input)',
+                        ring: 'var(--ring)',
+                        brand: {
+                            gold: '#CA8A04',
+                            goldHover: '#EAB308',
+                            slate: '#0F172A',
+                            navy: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Radix UI Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --background: #f8fafc;
+            --foreground: #020617;
+            --card: #ffffff;
+            --card-foreground: #020617;
+            --popover: #ffffff;
+            --primary: #0f172a;
+            --primary-foreground: #f8fafc;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #0f172a;
+            --muted: #f1f5f9;
+            --muted-foreground: #64748b;
+            --accent: #f1f5f9;
+            --accent-foreground: #0f172a;
+            --destructive: #ef4444;
+            --destructive-foreground: #f8fafc;
+            --border: #e2e8f0;
+            --input: #e2e8f0;
+            --ring: #0f172a;
+            --radius: 0.5rem;
+        }
+
+        .dark {
+            --background: #020617;
+            --foreground: #f8fafc;
+            --card: #0f172a;
+            --card-foreground: #f8fafc;
+            --popover: #0f172a;
+            --primary: #f8fafc;
+            --primary-foreground: #0f172a;
+            --secondary: #1e293b;
+            --secondary-foreground: #f8fafc;
+            --muted: #1e293b;
+            --muted-foreground: #94a3b8;
+            --accent: #1e293b;
+            --accent-foreground: #f8fafc;
+            --destructive: #7f1d1d;
+            --destructive-foreground: #f8fafc;
+            --border: #1e293b;
+            --input: #1e293b;
+            --ring: #cbd5e1;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+
+        /* Glassmorphism utils */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(202, 138, 4, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--muted);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--muted-foreground);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen selection:bg-brand-gold/30 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 w-full border-b border-border/40 glass-panel">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="./velyon-logo-web-site-image.png" alt="VELYON Logo" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/120x40/020617/FFFFFF.png?text=VELYON'">
+                <div class="h-5 w-px bg-border/50 mx-2"></div>
+                <span class="text-sm font-medium tracking-wider text-muted-foreground uppercase">Design System</span>
+            </div>
+            <nav class="flex items-center gap-6">
+                <a href="#philosophy" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Philosophy</a>
+                <a href="#typography" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Typography</a>
+                <a href="#colors" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Colors</a>
+                <a href="#components" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Components</a>
+                <a href="#specs" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Handoff Specs</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 max-w-6xl space-y-24">
+        
+        <!-- Hero Section -->
+        <section id="philosophy" class="space-y-6 pt-8">
+            <div class="inline-flex items-center rounded-full border border-brand-gold/30 bg-brand-gold/10 px-3 py-1 text-sm font-medium text-brand-gold">
+                <i data-lucide="sparkles" class="mr-2 h-4 w-4"></i> VELYON 1.0
+            </div>
+            <h1 class="text-5xl font-bold tracking-tight text-foreground sm:text-6xl max-w-3xl leading-tight">
+                Premium Dark Mode Enterprise <span class="bg-gradient-to-r from-brand-gold to-yellow-200 bg-clip-text text-transparent">Design System</span>
+            </h1>
+            <p class="text-xl text-muted-foreground max-w-2xl leading-relaxed">
+                A high-fidelity, photorealistic aesthetic tailored for a modern AI consulting firm. Built on absolute trust, authority, and technological superiority.
+            </p>
+        </section>
+
+        <!-- Typography Section -->
+        <section id="typography" class="space-y-8 relative">
+            <div class="space-y-2">
+                <h2 class="text-3xl font-semibold tracking-tight">Typography</h2>
+                <p class="text-muted-foreground">Premium geometric sans-serif prioritizing legibility and sophistication.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8 rounded-xl border border-border">
+                    <div class="text-sm font-mono text-muted-foreground mb-4">font-family: 'DM Sans', sans-serif;</div>
+                    <div class="space-y-6">
+                        <div>
+                            <span class="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Display / h1 (Semibold / 60px)</span>
+                            <h1 class="text-6xl font-semibold leading-tight">Ag</h1>
+                        </div>
+                        <div>
+                            <span class="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Heading / h2 (Medium / 30px)</span>
+                            <h2 class="text-3xl font-medium">The quick brown fox</h2>
+                        </div>
+                        <div>
+                            <span class="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Body / p (Regular / 16px)</span>
+                            <p class="text-base text-muted-foreground">A modern AI consulting firm requires typography that commands respect while maintaining extreme legibility across data-heavy interfaces.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-xl border border-border bg-[#0f172a]/50">
+                    <div class="text-sm font-mono text-muted-foreground mb-4">font-family: 'JetBrains Mono', monospace;</div>
+                    <div class="space-y-6">
+                        <div>
+                            <span class="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Code / Mono (Regular / 14px)</span>
+                            <code class="text-sm bg-background/50 px-2 py-1 rounded text-brand-gold">import { VelyonUI } from '@velyon/design';</code>
+                        </div>
+                        <div>
+                            <span class="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Numbers & Data (Medium / 24px)</span>
+                            <div class="font-mono text-2xl tracking-tight">£ 1,450,290.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Color Palette -->
+        <section id="colors" class="space-y-8">
+            <div class="space-y-2">
+                <h2 class="text-3xl font-semibold tracking-tight">Premium Color Palette</h2>
+                <p class="text-muted-foreground">Deep slate foundations with striking brass/gold accents for an authoritative legal-AI presence.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Theme Colors -->
+                <div class="rounded-xl overflow-hidden border border-border">
+                    <div class="h-24 bg-[#020617] w-full flex items-end p-3"><span class="text-xs text-slate-400 font-mono hidden md:block">#020617</span></div>
+                    <div class="p-3 bg-card border-t border-border">
+                        <div class="font-medium text-sm">Background</div>
+                        <div class="text-xs text-muted-foreground">Dark Navy Base</div>
+                    </div>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-border">
+                    <div class="h-24 bg-[#0f172a] w-full flex items-end p-3"><span class="text-xs text-slate-400 font-mono hidden md:block">#0F172A</span></div>
+                    <div class="p-3 bg-card border-t border-border">
+                        <div class="font-medium text-sm">Surface (Card)</div>
+                        <div class="text-xs text-muted-foreground">Slate 900</div>
+                    </div>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-brand-gold/30 gold-glow">
+                    <div class="h-24 bg-[#CA8A04] w-full flex items-end p-3"><span class="text-xs text-yellow-900 font-mono hidden md:block">#CA8A04</span></div>
+                    <div class="p-3 bg-card border-t border-border">
+                        <div class="font-medium text-sm">Accent (Gold)</div>
+                        <div class="text-xs text-muted-foreground">Interactive/CTA</div>
+                    </div>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-border">
+                    <div class="h-24 bg-[#1e293b] w-full flex items-end p-3"><span class="text-xs text-slate-400 font-mono hidden md:block">#1E293B</span></div>
+                    <div class="p-3 bg-card border-t border-border">
+                        <div class="font-medium text-sm">Border / Muted</div>
+                        <div class="text-xs text-muted-foreground">Slate 800</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components Section -->
+        <section id="components" class="space-y-8">
+            <div class="space-y-2">
+                <h2 class="text-3xl font-semibold tracking-tight">shadcn/ui Component Library</h2>
+                <p class="text-muted-foreground">Reusable, accessible components styled for the dark enterprise theme.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Buttons & Inputs -->
+                <div class="glass-panel p-8 rounded-xl border border-border space-y-8">
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">Interactive Elements</h3>
+                        <div class="flex flex-wrap gap-4 items-center">
+                            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                                Primary Action
+                            </button>
+                            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                                Secondary Outline
+                            </button>
+                            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                                Ghost
+                            </button>
+                            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none bg-brand-gold text-white hover:bg-brand-goldHover shadow-[0_0_15px_rgba(202,138,4,0.3)] h-10 px-4 py-2">
+                                Premium CTA <i data-lucide="arrow-right" class="ml-2 h-4 w-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-border">
+                        <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-widest mb-4">Form Controls</h3>
+                        <div class="space-y-4 max-w-sm">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Case Reference Number</label>
+                                <input type="text" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:border-brand-gold disabled:cursor-not-allowed disabled:opacity-50 transition-all" placeholder="VEL-2026-001" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">AI Analysis Query</label>
+                                <textarea class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:border-brand-gold disabled:cursor-not-allowed disabled:opacity-50 transition-all" placeholder="Cross-reference precedents..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards & Data -->
+                <div class="space-y-8">
+                    <!-- Stat Card -->
+                    <div class="rounded-xl border border-border bg-card text-card-foreground shadow-sm">
+                        <div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+                            <h3 class="tracking-tight text-sm font-medium">Total Anomalies Detected</h3>
+                            <i data-lucide="activity" class="h-4 w-4 text-muted-foreground"></i>
+                        </div>
+                        <div class="p-6 pt-0">
+                            <div class="text-3xl font-bold font-mono">1,248</div>
+                            <p class="text-xs text-muted-foreground mt-1 text-emerald-400">
+                                +12% higher confidence than yesterday
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Complex Card -->
+                    <div class="rounded-xl border border-border bg-card text-card-foreground shadow-sm overflow-hidden">
+                        <div class="p-6 pb-4 border-b border-border/50 bg-secondary/20">
+                            <h3 class="font-semibold leading-none tracking-tight">Legal AI Copilot</h3>
+                            <p class="text-sm text-muted-foreground mt-1">Reviewing 485 documents from Wincham Database.</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-brand-gold/10 p-2 rounded-full">
+                                    <i data-lucide="shield-alert" class="h-5 w-5 text-brand-gold"></i>
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <p class="text-sm font-medium leading-none">Compliance Risk Found</p>
+                                    <p class="text-sm text-muted-foreground">Clause 4.2 violates GDPR Art. 17.</p>
+                                </div>
+                                <button class="text-sm font-medium text-brand-gold hover:underline">Review</button>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="bg-primary/10 p-2 rounded-full border border-border">
+                                    <i data-lucide="check-circle" class="h-5 w-5 text-emerald-500"></i>
+                                </div>
+                                <div class="flex-1 space-y-1">
+                                    <p class="text-sm font-medium leading-none">Financial Audit Complete</p>
+                                    <p class="text-sm text-muted-foreground">No discrepancies in Q3 ledger.</p>
+                                </div>
+                                <button class="text-sm font-medium text-muted-foreground hover:text-foreground">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Handoff Specs -->
+        <section id="specs" class="space-y-8 pb-20">
+            <div class="space-y-2">
+                <h2 class="text-3xl font-semibold tracking-tight">Developer Handoff Specs</h2>
+                <p class="text-muted-foreground">Structural constants mapping design tokens to CSS variables and Tailwind classes.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- CSS Vars Table -->
+                <div class="rounded-xl border border-border bg-card overflow-hidden">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-muted-foreground bg-secondary/50 uppercase">
+                            <tr>
+                                <th class="px-6 py-3">Token</th>
+                                <th class="px-6 py-3">CSS Variable</th>
+                                <th class="px-6 py-3">Tailwind Class</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-border">
+                            <tr class="hover:bg-muted/50 transition-colors">
+                                <td class="px-6 py-4 font-medium">Background Core</td>
+                                <td class="px-6 py-4 font-mono text-muted-foreground">--background</td>
+                                <td class="px-6 py-4 font-mono text-brand-gold">bg-background</td>
+                            </tr>
+                            <tr class="hover:bg-muted/50 transition-colors">
+                                <td class="px-6 py-4 font-medium">Card Surface</td>
+                                <td class="px-6 py-4 font-mono text-muted-foreground">--card</td>
+                                <td class="px-6 py-4 font-mono text-brand-gold">bg-card</td>
+                            </tr>
+                            <tr class="hover:bg-muted/50 transition-colors">
+                                <td class="px-6 py-4 font-medium">Primary Accent</td>
+                                <td class="px-6 py-4 font-mono text-muted-foreground">--brand-gold</td>
+                                <td class="px-6 py-4 font-mono text-brand-gold">bg-brand-gold text-brand-gold</td>
+                            </tr>
+                            <tr class="hover:bg-muted/50 transition-colors">
+                                <td class="px-6 py-4 font-medium">Subtle Border</td>
+                                <td class="px-6 py-4 font-mono text-muted-foreground">--border</td>
+                                <td class="px-6 py-4 font-mono text-brand-gold">border-border</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Spacing & Radii -->
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 rounded-xl border border-border">
+                        <h4 class="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Border Radius</h4>
+                        <div class="flex items-end gap-6 text-sm">
+                            <div class="space-y-2 text-center">
+                                <div class="w-16 h-16 bg-muted border border-border rounded-sm"></div>
+                                <code class="text-xs text-muted-foreground">sm (0.125rem)</code>
+                            </div>
+                            <div class="space-y-2 text-center">
+                                <div class="w-16 h-16 bg-muted border border-border rounded-md"></div>
+                                <code class="text-xs text-muted-foreground">md (0.375rem)</code>
+                            </div>
+                            <div class="space-y-2 text-center">
+                                <div class="w-16 h-16 bg-muted border border-border rounded-xl"></div>
+                                <code class="text-xs text-brand-gold font-bold">xl (0.75rem)</code>
+                            </div>
+                            <div class="space-y-2 text-center">
+                                <div class="w-16 h-16 bg-muted border border-border rounded-full"></div>
+                                <code class="text-xs text-muted-foreground">full</code>
+                            </div>
+                        </div>
+                        <p class="text-xs text-muted-foreground mt-4">Note: Modern AI enterprise favors slightly softer corners (xl) on major cards, while keeping data-grid elements strict (sm).</p>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-xl border border-border bg-gradient-to-br from-brand-gold/10 to-transparent">
+                        <h4 class="text-sm font-semibold mb-2 uppercase tracking-wider text-brand-gold flex items-center">
+                            <i data-lucide="zap" class="h-4 w-4 mr-2"></i> Interaction Guidelines
+                        </h4>
+                        <ul class="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+                            <li>All transitions should be set to <code class="text-brand-gold">duration-200</code> or <code class="text-brand-gold">duration-300</code>.</li>
+                            <li>Critical CTAs should feature a subtle gold glow using CSS box-shadow.</li>
+                            <li>Glass panels should use <code class="text-brand-gold">backdrop-blur-md</code> on top of opacity-modified backgrounds.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Init icons -->
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>

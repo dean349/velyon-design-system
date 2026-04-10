@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELYON - Strategic AI Consultancy Design System</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        velyon: {
+                            obsidian: '#0A0A0A',
+                            graphite: '#171717',
+                            offwhite: '#F5F5F5',
+                            grey: '#A3A3A3',
+                            azure: '#1D4ED8',
+                            cyan: '#00F0FF',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Radix UI Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #0A0A0A;
+            color: #F5F5F5;
+            overflow-x: hidden;
+        }
+
+        /* Fluid background glow */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(29, 78, 216, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.08) 0%, transparent 50%);
+            z-index: 0;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1.2; transform: scale(1.05); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #171717;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A3A3A3;
+        }
+        
+        .elevated-card {
+            background-color: rgba(23, 23, 23, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .interactive-card {
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease, background-color 0.4s ease;
+        }
+        .interactive-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px) scale(1.01);
+            background-color: rgba(30, 30, 30, 0.8);
+        }
+    </style>
+</head>
+<body class="font-body antialiased min-h-screen selection:bg-velyon-azure/30 selection:text-velyon-offwhite">
+    
+    <div class="ambient-glow"></div>
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 z-50 w-full border-b border-white/5 bg-velyon-obsidian/80 backdrop-blur-md transition-all duration-300">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between max-w-7xl">
+            <div class="flex items-center gap-4">
+                <img src="./velyon-logo-web-site-image.png" alt="VELYON Logo" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/120x40/0A0A0A/F5F5F5.png?text=VELYON'">
+                <div class="h-5 w-px bg-white/10"></div>
+                <span class="font-heading text-sm font-semibold tracking-wider text-velyon-grey uppercase">Design System</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#philosophy" class="font-heading text-sm font-medium text-velyon-grey hover:text-velyon-offwhite transition-all duration-300">Philosophy</a>
+                <a href="#typography" class="font-heading text-sm font-medium text-velyon-grey hover:text-velyon-offwhite transition-all duration-300">Typography</a>
+                <a href="#colors" class="font-heading text-sm font-medium text-velyon-grey hover:text-velyon-offwhite transition-all duration-300">Colors</a>
+                <a href="#components" class="font-heading text-sm font-medium text-velyon-grey hover:text-velyon-offwhite transition-all duration-300">Components</a>
+                <a href="#guarantee" class="font-heading text-sm font-medium text-velyon-cyan hover:text-cyan-400 transition-all duration-300">2X ROI Guarantee</a>
+            </nav>
+            <button class="md:hidden text-velyon-offwhite">
+                <i data-lucide="menu" class="h-6 w-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="relative z-10 container mx-auto px-6 pt-32 pb-24 max-w-7xl space-y-24">
+        
+        <!-- Hero Section -->
+        <section id="philosophy" class="space-y-8 animate-fade-in-up">
+            <div class="inline-flex items-center rounded-full border border-velyon-azure/30 bg-velyon-azure/10 px-4 py-1.5 text-sm font-medium text-velyon-azure font-heading transition-all duration-300 hover:bg-velyon-azure/20">
+                <i data-lucide="cpu" class="mr-2 h-4 w-4"></i> Executive Dark Mode 1.0
+            </div>
+            <h1 class="font-heading text-5xl md:text-7xl font-bold tracking-tight text-velyon-offwhite max-w-4xl leading-tight">
+                Technology without strategy is <span class="bg-gradient-to-r from-velyon-cyan to-[#C0FFFF] bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(0,240,255,0.3)]">overhead.</span>
+            </h1>
+            <p class="text-xl text-velyon-grey max-w-3xl leading-relaxed font-body font-light">
+                This Design System translates Velyon's strategic identity into functional UI/UX patterns. It is built to convey trust, authority, and cutting-edge innovation—providing fractional CRO-level thinking combined with hands-on AI implementation.
+            </p>
+            <div class="pt-8">
+                <div class="bg-white p-2 rounded-xl inline-block shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                    <img src="./VELYON%20LOGO%20-%20Hi%20Res%20-%20Transparent.png" alt="VELYON Large Logo" class="w-48 md:w-64 h-auto object-contain" onerror="this.src='./velyon-logo-web-site-image.png'">
+                </div>
+            </div>
+        </section>
+
+        <!-- Color Palette -->
+        <section id="colors" class="space-y-8">
+            <div class="space-y-2">
+                <h2 class="font-heading text-3xl font-semibold tracking-tight text-velyon-offwhite">Color Palette</h2>
+                <p class="text-velyon-grey">Foundational shades of Obsidian and Graphite with highly intentional Azure and Tech Cyan accents.</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Obsidian -->
+                <div class="rounded-xl overflow-hidden border border-white/5 bg-velyon-graphite">
+                    <div class="h-32 bg-velyon-obsidian w-full relative flex items-end p-4 shadow-inner">
+                         <span class="text-xs text-white/30 font-mono tracking-widest">#0A0A0A</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="font-heading font-semibold text-velyon-offwhite">Deep Obsidian</div>
+                        <div class="text-sm text-velyon-grey mt-1">Background. Deep tech foundation.</div>
+                    </div>
+                </div>
+                
+                <!-- Graphite -->
+                <div class="rounded-xl overflow-hidden border border-white/5 bg-velyon-graphite">
+                    <div class="h-32 bg-velyon-graphite w-full relative flex items-end p-4 border-b border-white/5">
+                         <span class="text-xs text-white/30 font-mono tracking-widest">#171717</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="font-heading font-semibold text-velyon-offwhite">Graphite</div>
+                        <div class="text-sm text-velyon-grey mt-1">Surfaces. Cards, modals, elevation.</div>
+                    </div>
+                </div>
+                
+                <!-- Off-White & Grey -->
+                <div class="rounded-xl overflow-hidden border border-white/5 bg-velyon-graphite">
+                    <div class="h-32 flex flex-col">
+                        <div class="flex-1 bg-velyon-offwhite text-velyon-obsidian flex items-end p-4">
+                            <span class="text-xs font-mono font-medium tracking-widest">#F5F5F5</span>
+                        </div>
+                        <div class="flex-1 bg-velyon-grey text-velyon-obsidian flex items-end p-4">
+                            <span class="text-xs font-mono font-medium tracking-widest">#A3A3A3</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="font-heading font-semibold text-velyon-offwhite">Typography Core</div>
+                        <div class="text-sm text-velyon-grey mt-1">Off-White (Primary text), Grey (Secondary).</div>
+                    </div>
+                </div>
+
+                <!-- Azure -->
+                <div class="rounded-xl overflow-hidden border border-velyon-azure/20 shadow-[0_0_30px_rgba(29,78,216,0.1)] bg-velyon-graphite">
+                    <div class="h-32 bg-velyon-azure w-full relative flex items-end p-4">
+                         <span class="text-xs text-white/80 font-mono tracking-widest">#1D4ED8</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="font-heading font-semibold text-velyon-offwhite">Deep Azure</div>
+                        <div class="text-sm text-velyon-grey mt-1">Deep Blue Foundation. Creates contrast for Cyan.</div>
+                    </div>
+                </div>
+
+                <!-- Cyan -->
+                <div class="rounded-xl overflow-hidden border border-velyon-cyan/40 shadow-[0_0_40px_rgba(0,240,255,0.15)] bg-velyon-graphite">
+                    <div class="h-32 bg-velyon-cyan w-full relative flex items-end p-4 shadow-[inset_0_0_20px_rgba(255,255,255,0.3)]">
+                         <span class="text-xs text-black/80 font-mono tracking-widest font-semibold">#00F0FF</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="font-heading font-semibold text-velyon-offwhite drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">Neon Cyan</div>
+                        <div class="text-sm text-velyon-grey mt-1">High-Impact Accents, Guarantees, Highlights.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography Section -->
+        <section id="typography" class="space-y-8 relative">
+            <div class="space-y-2">
+                <h2 class="font-heading text-3xl font-semibold tracking-tight text-velyon-offwhite">Typography</h2>
+                <p class="text-velyon-grey">A modern stack bridging B2B professionalism with SaaS aesthetics.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Primary Font -->
+                <div class="elevated-card p-8 rounded-xl">
+                    <div class="text-sm font-mono text-velyon-grey mb-6 tracking-widest uppercase">Primary: Plus Jakarta Sans</div>
+                    <div class="space-y-8">
+                        <div>
+                            <span class="text-xs text-velyon-grey uppercase tracking-widest block mb-2">Display / H1 (Bold 700)</span>
+                            <h1 class="font-heading text-5xl font-bold text-velyon-offwhite leading-tight">Revenue Velocity</h1>
+                        </div>
+                        <div>
+                            <span class="text-xs text-velyon-grey uppercase tracking-widest block mb-2">Section / H2 (Semi-Bold 600)</span>
+                            <h2 class="font-heading text-3xl font-semibold text-velyon-offwhite">Strategic Diagnosis First</h2>
+                        </div>
+                        <div>
+                            <span class="text-xs text-velyon-grey uppercase tracking-widest block mb-2">Interface / Navigation (Medium 500)</span>
+                            <span class="font-heading text-lg font-medium text-velyon-offwhite">Book Consultation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Font -->
+                <div class="elevated-card p-8 rounded-xl bg-velyon-obsidian">
+                    <div class="text-sm font-mono text-velyon-grey mb-6 tracking-widest uppercase">Secondary: Inter</div>
+                    <div class="space-y-8">
+                        <div>
+                            <span class="text-xs text-velyon-grey uppercase tracking-widest block mb-2">Body Copy (Regular 400)</span>
+                            <p class="font-body text-base text-velyon-grey leading-relaxed">
+                                We help small to mid-cap businesses operationalize AI intelligently, converting human latency into digital velocity. Designed for high legibility on digital screens, perfect for dense information and dashboards.
+                            </p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-velyon-grey uppercase tracking-widest block mb-2">Microcopy & Data (Light 300)</span>
+                            <div class="font-body text-sm font-light text-velyon-grey">
+                                Last synced: Oct 24, 2026<br>
+                                Processed 10,245 parameters successfully.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components Section -->
+        <section id="components" class="space-y-8">
+            <div class="space-y-2">
+                <h2 class="font-heading text-3xl font-semibold tracking-tight text-velyon-offwhite">UI Architecture & Components</h2>
+                <p class="text-velyon-grey">Subtle depths, decisive CTAs, and a liquid glass aesthetic.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Forms and Buttons -->
+                <div class="elevated-card p-8 rounded-xl space-y-10">
+                    
+                    <!-- Buttons -->
+                    <div>
+                        <h3 class="font-heading text-sm font-medium text-velyon-grey uppercase tracking-widest mb-6">Call-to-Actions</h3>
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-6 items-start sm:items-center">
+                            
+                            <!-- Primary -->
+                            <button class="font-heading relative overflow-hidden group inline-flex items-center justify-center rounded-md text-sm font-semibold transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velyon-azure disabled:pointer-events-none disabled:opacity-50 bg-gradient-to-r from-velyon-azure to-blue-800 border border-blue-600/50 text-white hover:shadow-[0_0_30px_rgba(29,78,216,0.4)] h-11 px-6 py-2">
+                                <span class="relative z-10 transition-transform duration-300 group-hover:scale-105">Book Consultation</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-white/20 to-blue-400/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                            </button>
+                            
+                            <!-- Secondary -->
+                            <button class="font-heading inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velyon-azure disabled:pointer-events-none disabled:opacity-50 bg-black/40 backdrop-blur-md border border-white/10 text-velyon-offwhite hover:bg-white/10 hover:border-white/20 hover:shadow-[0_4px_20px_rgba(255,255,255,0.05)] h-11 px-6 py-2 shadow-inner">
+                                View Roadmap
+                            </button>
+
+                            <!-- Ghost -->
+                            <button class="font-heading inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velyon-azure disabled:pointer-events-none disabled:opacity-50 bg-transparent text-velyon-grey hover:text-velyon-offwhite hover:bg-white/5 h-11 px-4 py-2">
+                                Cancel
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="h-px bg-white/5 w-full"></div>
+
+                    <!-- Inputs -->
+                    <div>
+                        <h3 class="font-heading text-sm font-medium text-velyon-grey uppercase tracking-widest mb-6">Input Fields</h3>
+                        <div class="space-y-6 max-w-md">
+                            <div class="space-y-2">
+                                <label class="font-heading text-sm font-medium text-velyon-offwhite">Corporate Email</label>
+                                <input type="email" class="font-body flex h-11 w-full rounded-md border border-white/10 bg-black/20 px-4 py-2 text-sm text-velyon-offwhite placeholder:text-velyon-grey focus:outline-none focus:border-velyon-azure focus:ring-1 focus:ring-velyon-azure transition-all duration-300" placeholder="ceo@company.com" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="font-heading text-sm font-medium text-velyon-offwhite">Current ARR Target</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-velyon-grey font-body">$</span>
+                                    <input type="text" class="font-body flex h-11 w-full rounded-md border border-white/10 bg-black/20 pl-8 pr-4 py-2 text-sm text-velyon-offwhite placeholder:text-velyon-grey focus:outline-none focus:border-velyon-azure focus:ring-1 focus:ring-velyon-azure transition-all duration-300" placeholder="10,000,000" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Showcase Cards -->
+                <div class="space-y-8">
+                    
+                    <!-- Interactive Feature Card -->
+                    <div class="elevated-card interactive-card rounded-xl p-8 cursor-pointer group">
+                        <div class="w-12 h-12 rounded-lg bg-velyon-azure/10 border border-velyon-azure/20 flex items-center justify-center mb-6 group-hover:bg-velyon-azure/20 transition-all duration-300">
+                            <i data-lucide="network" class="h-6 w-6 text-velyon-azure"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-semibold text-velyon-offwhite mb-3">Fractional Revenue Leadership</h3>
+                        <p class="font-body text-velyon-grey mb-6">
+                            25+ years of P&L and sales leadership applied directly to your operations, driving actual business outcomes rather than just implementing software.
+                        </p>
+                        <div class="flex items-center text-velyon-offwhite font-heading font-medium text-sm group-hover:text-velyon-azure transition-colors duration-300">
+                            Learn more <i data-lucide="arrow-right" class="ml-2 h-4 w-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- System Metric Card -->
+                    <div class="elevated-card rounded-xl p-6 flex flex-row items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="font-heading text-sm font-medium text-velyon-grey">Active Automation Agents</p>
+                            <p class="font-heading text-3xl font-bold text-velyon-offwhite">1,402</p>
+                        </div>
+                        <div class="h-12 w-12 rounded-full border-2 border-velyon-azure/30 flex items-center justify-center relative">
+                            <div class="absolute inset-0 rounded-full border-t-2 border-velyon-azure animate-spin"></div>
+                            <i data-lucide="check" class="h-5 w-5 text-velyon-azure"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROI Guarantee Focus -->
+        <section id="guarantee" class="relative rounded-2xl border border-velyon-cyan/20 bg-velyon-graphite p-10 md:p-16 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-velyon-cyan/5 to-transparent pointer-events-none"></div>
+            <div class="absolute top-0 right-0 p-8 opacity-10">
+                <i data-lucide="target" class="w-64 h-64 text-velyon-cyan"></i>
+            </div>
+            
+            <div class="relative z-10 max-w-2xl space-y-6">
+                <div class="inline-flex items-center rounded-sm bg-velyon-cyan/20 px-3 py-1 font-heading text-xs font-bold text-velyon-cyan uppercase tracking-widest">
+                    The North Star
+                </div>
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-velyon-offwhite">The 2X ROI Guarantee</h2>
+                <p class="font-body text-xl text-velyon-grey leading-relaxed">
+                    We guarantee a 2X Return on Investment within 12 months, calculated as revenue generated plus costs saved. If the target is missed, <span class="text-velyon-offwhite font-medium">we continue working for free until it is hit.</span>
+                </p>
+                <div class="pt-4">
+                    <button class="font-heading group relative overflow-hidden flex items-center justify-center rounded-md text-sm font-bold transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velyon-cyan disabled:pointer-events-none disabled:opacity-50 bg-gradient-to-r from-velyon-cyan to-[#80F8FF] border border-white/50 text-velyon-obsidian shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_40px_rgba(0,240,255,0.7)] hover:-translate-y-1 h-12 px-8">
+                        <span class="relative z-10 flex items-center">
+                            Secure Your Partnership <i data-lucide="shield-check" class="ml-2 h-5 w-5 opacity-80 transition-transform duration-300 group-hover:scale-110"></i>
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/60 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/5 py-12 bg-velyon-obsidian">
+        <div class="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <img src="./velyon-logo-web-site-image.png" alt="VELYON Logo" class="h-6 w-auto object-contain opacity-50 grayscale" onerror="this.src='https://placehold.co/120x40/0A0A0A/A3A3A3.png?text=VELYON'">
+            </div>
+            <p class="font-body text-sm text-velyon-grey/50">
+                &copy; 2026 Velyon. All rights reserved. Strategic AI Consultancy.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Init icons -->
+    <script>
+      lucide.createIcons();
+      
+      // Simple fade-in-up animation logic
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.7s ease-out forwards;
+        }
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+</body>
+</html>

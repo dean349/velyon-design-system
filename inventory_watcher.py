@@ -1,13 +1,13 @@
 """
 ================================================================================
-  VELYON FORENSIC VAULT SYNC ENGINE  v3.0
+  VELYON FORENSIC VAULT SYNC ENGINE  v4.0 (Cloud Native)
   inventory_watcher.py
 ================================================================================
-  Watches D:\\VELYON - LEGAL COMMAND CENTER for file changes and syncs
-  important case documents to:
+  Watches the VELYON - LEGAL COMMAND CENTER workspace for file changes and
+  syncs important case documents to:
     - gs://velyon-forensic-vault-dean/velyon/Los_Romeros_Case_Files/
     - GitHub: dean349/dean349.github.io
-
+ 
   Case folder routing maps local sub-folders → GCS case folders automatically.
   Brain/session files are EXCLUDED (not synced to save storage costs).
 ================================================================================
@@ -20,19 +20,24 @@ import logging
 import subprocess
 import fnmatch
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
+from collections import deque
+import threading
 
 try:
     from watchdog.observers import Observer
     from watchdog.events import PatternMatchingEventHandler
+    from google.cloud import storage
+    from google.api_core.exceptions import GoogleAPICallError
 except ImportError:
-    print("ERROR: watchdog not installed. Run: pip install watchdog")
+    print("ERROR: Required libraries not installed.")
+    print("Please run: pip install watchdog google-cloud-storage")
     sys.exit(1)
 
 # ─── CONFIGURATION ────────────────────────────────────────────────────────────
 
 # Use current script directory as base — works on Windows AND Cloud Workstation
-BASE_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent
 
 GCS_BUCKET  = "gs://velyon-forensic-vault-dean"
 GCS_BASE    = f"{GCS_BUCKET}/velyon/Los_Romeros_Case_Files"
@@ -41,7 +46,7 @@ LOG_FILE    = BASE_DIR / "inventory_watcher.log"
 REGISTRY    = BASE_DIR / "files_registry.json"
 
 # Minimum seconds between sync operations (debounce)
-SYNC_DEBOUNCE_SECS = 10
+SYNC_DEBOUNCE_SECS = 5
 
 # ─── CASE FOLDER ROUTING MAP ──────────────────────────────────────────────────
 # Maps: local subfolder name keyword → GCS case folder name
@@ -92,25 +97,25 @@ IMPORTANT_EXTENSIONS = {
 # ─── PATTERNS TO IGNORE ───────────────────────────────────────────────────────
 # These patterns are checked against the full file path (lowercase)
 IGNORE_PATTERNS = [
-    # This script's own output files
-    "*inventory_watcher.log*",
-    "*files_registry.json*",
-    "*inventory_watcher.py*",
-
+    # This script's own files and outputs
+    f"*{LOG_FILE.name}",
+    f"*{REGISTRY.name}",
+    f"*{Path(__file__).name}",
+    
     # Git internals
-    "*\\.git\\*",
+    str(BASE_DIR / ".git"),
     "*/.git/*",
     "*.git*",
-
+    
     # Nested git repositories
     "*_github_los_romeros_repo*",
     "*_github_*",
-
+    
     # VS Code / IDE
-    "*\\.vscode\\*",
+    str(BASE_DIR / ".vscode"),
     "*/.vscode/*",
     "*.code-workspace*",
-
+    
     # Antigravity brain files (NOT synced to vault - saves storage costs)
     "*antigravity\\brain*",
     "*antigravity/brain*",
@@ -122,7 +127,7 @@ IGNORE_PATTERNS = [
     "*__pycache__*",
     "*.pyc",
     "*.pyo",
-
+    
     # Temp / system
     "*.tmp",
     "*.temp",
@@ -130,7 +135,7 @@ IGNORE_PATTERNS = [
     "*.DS_Store",
     "thumbs.db",
     "desktop.ini",
-
+    
     # The landing page index (managed separately)
     "*antigravity_files_produced*",
     "*index.html",
@@ -148,76 +153,80 @@ logging.basicConfig(
 )
 log = logging.getLogger("VelyonVaultSync")
 
+# --- GCS Client Initialization ---
+storage_client = storage.Client()
+bucket_name = GCS_BUCKET.replace("gs://", "")
+gcs_bucket_client = storage_client.bucket(bucket_name)
 
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 
-def is_ignored(file_path: str) -> bool:
+def is_ignored(file_path: Path) -> bool:
     """Return True if this file should be skipped."""
-    fp_lower = file_path.lower().replace("/", "\\")
+    # Use Path.is_relative_to for robust checking against directory patterns
+    path_str_lower = str(file_path).lower()
     for pattern in IGNORE_PATTERNS:
-        if fnmatch.fnmatch(fp_lower, pattern.lower()):
+        # Handle directory patterns
+        if pattern.endswith("/") or pattern.endswith("\\"):
+            if Path(path_str_lower).is_relative_to(pattern.lower()):
+                return True
+        # Handle file patterns
+        elif fnmatch.fnmatch(path_str_lower, pattern.lower()):
             return True
     return False
 
 
-def is_important_file(file_path: str) -> bool:
+def is_important_file(file_path: Path) -> bool:
     """Return True only for document/evidence file types we care about."""
-    ext = Path(file_path).suffix.lower()
-    return ext in IMPORTANT_EXTENSIONS
+    return file_path.suffix.lower() in IMPORTANT_EXTENSIONS
 
 
-def get_gcs_folder(file_path: str) -> str:
+def get_gcs_folder(file_path: Path) -> str | None:
     """
     Determine which GCS case folder this file belongs to.
     Inspects the full path for known folder keywords.
     Returns GCS folder name, or None if file should not be synced.
     """
-    path_lower = file_path.lower()
+    path_lower = str(file_path).lower()
 
     for keyword, gcs_folder in FOLDER_ROUTING:
         if keyword.lower() in path_lower:
             return gcs_folder
 
-    # File is in base dir or unrecognised subfolder — skip unless in a named case folder
     return None
 
 
-def sync_file_to_gcs(local_path: str):
+def sync_file_to_gcs(local_path: Path):
     """Upload a single file to the correct GCS case folder."""
     if is_ignored(local_path):
-        log.debug(f"IGNORED: {local_path}")
+        log.debug(f"IGNORED (pattern match): {local_path.name}")
         return
 
     if not is_important_file(local_path):
-        log.debug(f"NOT IMPORTANT TYPE: {local_path}")
+        log.debug(f"NOT IMPORTANT TYPE: {local_path.name}")
         return
 
-    if not os.path.isfile(local_path):
-        log.debug(f"NOT A FILE (skipping): {local_path}")
+    if not local_path.is_file():
+        log.debug(f"NOT A FILE (skipping): {local_path.name}")
         return
 
     gcs_folder = get_gcs_folder(local_path)
     if gcs_folder is None:
-        log.debug(f"NO GCS ROUTING MATCH: {local_path}")
+        log.debug(f"NO GCS ROUTING MATCH: {local_path.name}")
         return
 
-    filename = os.path.basename(local_path)
-    gcs_dest = f"{GCS_BASE}/{gcs_folder}/{filename}"
+    filename = local_path.name
+    # Construct GCS path without the gs:// prefix for the client library
+    gcs_dest_path = f"velyon/Los_Romeros_Case_Files/{gcs_folder}/{filename}"
 
     log.info(f"SYNCING → {gcs_folder}: {filename}")
     try:
-        result = subprocess.run(
-            ["gcloud", "storage", "cp", local_path, gcs_dest],
-            capture_output=True, text=True, timeout=120
-        )
-        if result.returncode == 0:
-            log.info(f"✅ UPLOADED: {filename} → {gcs_folder}")
-        else:
-            log.error(f"❌ UPLOAD FAILED: {filename}\n{result.stderr.strip()}")
-    except subprocess.TimeoutExpired:
-        log.error(f"⏱ TIMEOUT uploading: {filename}")
-    except FileNotFoundError:
-        log.error("❌ 'gcloud' not found in PATH. Is Google Cloud SDK installed?")
+        blob = gcs_bucket_client.blob(gcs_dest_path)
+        blob.upload_from_filename(str(local_path), timeout=120)
+        log.info(f"✅ UPLOADED: {filename} → {gcs_folder}")
+    except GoogleAPICallError as e:
+        log.error(f"❌ GCS UPLOAD FAILED for {filename}: {e}")
+    except Exception as e:
+        log.error(f"❌ UNEXPECTED UPLOAD ERROR for {filename}: {e}")
 
 
 def run_git_sync():
@@ -225,7 +234,7 @@ def run_git_sync():
     try:
         # Stage only tracked files — avoids nested repo issues
         result = subprocess.run(
-            ["git", "add", "-u"],
+            ["git", "add", "."], # More robust to catch new files
             cwd=str(BASE_DIR), capture_output=True, text=True, timeout=30
         )
         if result.returncode != 0:
@@ -242,7 +251,7 @@ def run_git_sync():
             return
 
         # Commit
-        commit_msg = f"Auto-sync: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        commit_msg = f"Auto-sync: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}"
         subprocess.run(
             ["git", "commit", "-m", commit_msg],
             cwd=str(BASE_DIR), capture_output=True, text=True, timeout=30
@@ -271,48 +280,69 @@ class VaultSyncHandler(PatternMatchingEventHandler):
 
     def __init__(self):
         # Only watch these extensions at the watchdog level
-        patterns = [f"*{ext}" for ext in IMPORTANT_EXTENSIONS]
+        patterns = [f"*{ext.lower()}" for ext in IMPORTANT_EXTENSIONS]
         ignore_patterns = [
-            "*.log", "*.json", "*.py",
-            f"*{LOG_FILE.name}*",
-            f"*{REGISTRY.name}*",
+            f"*{LOG_FILE.name}",
+            f"*{REGISTRY.name}",
+            f"*{Path(__file__).name}",
+            "*/.git/*",
+            "*/.vscode/*",
+            "*/__pycache__/*",
         ]
         super().__init__(
             patterns=patterns,
             ignore_patterns=ignore_patterns,
             ignore_directories=True,
-            case_sensitive=False,
+            case_sensitive=False
         )
-        self._last_sync = 0
+        self.sync_queue = deque()
+        self.last_sync_time = 0
+        self.sync_thread = threading.Thread(target=self._process_queue, daemon=True)
+        self.sync_thread.start()
 
-    def _debounced_sync(self, path):
-        """Prevent rapid-fire syncs within SYNC_DEBOUNCE_SECS."""
+    def _process_queue(self):
+        """Process the sync queue in a separate thread."""
+        while True:
+            if self.sync_queue:
+                now = time.time()
+                if now - self.last_sync_time > SYNC_DEBOUNCE_SECS:
+                    self.last_sync_time = now
+                    
+                    # Process all items currently in the queue
+                    items_to_sync = set()
+                    while self.sync_queue:
+                        items_to_sync.add(self.sync_queue.popleft())
+
+                    log.info(f"--- Batch syncing {len(items_to_sync)} file(s) ---")
+                    for path in items_to_sync:
+                        sync_file_to_gcs(path)
+                    
+                    log.info("--- Running Git sync after batch ---")
+                    run_git_sync()
+            time.sleep(1)
+
+    def _queue_sync(self, path_str: str):
+        """Add a file path to the sync queue if it's not already there."""
         now = time.time()
-        if now - self._last_sync < SYNC_DEBOUNCE_SECS:
-            log.debug(f"Debounced: {path}")
-            return
-        self._last_sync = now
-        sync_file_to_gcs(path)
-        run_git_sync()
+        path = Path(path_str)
+        if path not in self.sync_queue:
+            self.sync_queue.append(path)
+            log.info(f"QUEUED: {path.name}")
 
     def on_created(self, event):
-        log.info(f"NEW FILE: {event.src_path}")
-        self._debounced_sync(event.src_path)
+        self._queue_sync(event.src_path)
 
     def on_modified(self, event):
-        log.info(f"MODIFIED: {event.src_path}")
-        self._debounced_sync(event.src_path)
+        self._queue_sync(event.src_path)
 
     def on_moved(self, event):
-        log.info(f"MOVED → {event.dest_path}")
-        self._debounced_sync(event.dest_path)
-
+        self._queue_sync(event.dest_path)
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
 
 def main():
     log.info("=" * 60)
-    log.info("  VELYON FORENSIC VAULT SYNC ENGINE v3.0 — STARTING")
+    log.info("  VELYON FORENSIC VAULT SYNC ENGINE v4.0 (Cloud Native) — STARTING")
     log.info(f"  Watching: {BASE_DIR}")
     log.info(f"  GCS Vault: {GCS_BASE}")
     log.info("=" * 60)
@@ -333,7 +363,6 @@ def main():
 
     observer.join()
     log.info("Vault sync engine stopped.")
-
 
 if __name__ == "__main__":
     main()

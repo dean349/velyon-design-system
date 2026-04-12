@@ -41,3 +41,10 @@ desktop.ini
 # Temp folder init placeholders
 .folder_init/
 **/.keep
+
+# Large media files — stored in gs://velyon-forensic-vault-dean instead of Git
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm

@@ -1,0 +1,13 @@
+{
+  "pythonVersion": "3.12",
+  "pythonPlatform": "Windows",
+  "pythonPath": "C:\\Users\\Dean Harrison\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "venvPath": "",
+  "exclude": [
+    "**/__pycache__",
+    "**/.git",
+    "**/node_modules"
+  ],
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false
+}

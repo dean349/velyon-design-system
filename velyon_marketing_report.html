@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velyon — Marketing Strategy & Visual Assets Report 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090b;
+    --bg-card: #111113;
+    --bg-card-hover: #18181b;
+    --border: #27272a;
+    --border-subtle: #1c1c1f;
+    --primary: #3b82f6;
+    --primary-light: #60a5fa;
+    --primary-glow: rgba(59,130,246,0.15);
+    --accent: #8b5cf6;
+    --accent-glow: rgba(139,92,246,0.12);
+    --gold: #f59e0b;
+    --text: #fafafa;
+    --text-muted: #71717a;
+    --text-secondary: #a1a1aa;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(9,9,11,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  nav img { height: 36px; }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  nav ul a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-glow);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--primary-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+  }
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .hero-meta span {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .hero-meta strong { color: var(--text-secondary); }
+
+  /* ── SECTION ── */
+  section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 680px;
+    margin-bottom: 3rem;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── TOP 5 SLOGANS ── */
+  .top5-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .top5-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .top5-card:hover {
+    border-color: var(--primary);
+    background: var(--bg-card-hover);
+  }
+  .top5-card:first-child {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(245,158,11,0.05) 0%, var(--bg-card) 60%);
+  }
+  .rank {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .top5-card:first-child .rank { color: var(--gold); }
+  .top5-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .top5-card p { color: var(--text-secondary); font-size: 0.95rem; font-style: italic; }
+  .why-badge {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: var(--primary-glow);
+    color: var(--primary-light);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* ── IMAGE GRID ── */
+  .img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+  }
+  .img-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s;
+  }
+  .img-card:hover {
+    transform: translateY(-6px);
+    border-color: #3f3f46;
+  }
+  .img-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+  }
+  .img-card-body { padding: 1.25rem 1.5rem 1.5rem; }
+  .img-card-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 0.4rem;
+  }
+  .img-card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .img-card-desc { color: var(--text-muted); font-size: 0.855rem; }
+
+  /* ── SLOGANS LIST ── */
+  .slogan-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1rem;
+  }
+  .slogan-pill {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: border-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .slogan-pill:hover { border-color: var(--primary); color: var(--text); }
+  .slogan-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 1.5rem;
+    padding-top: 2px;
+  }
+
+  /* ── EMAIL TABLE ── */
+  .email-table { width: 100%; border-collapse: collapse; }
+  .email-table th {
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .email-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  .email-table tr:hover td { background: var(--bg-card-hover); color: var(--text); }
+  .email-address { font-family: monospace; color: var(--primary-light); }
+
+  /* ── TAGLINE PAIRS ── */
+  .pair-grid { display: grid; gap: 1.25rem; }
+  .pair-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+  }
+  .pair-card h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+  .pair-card p { color: var(--text-muted); font-size: 0.92rem; }
+
+  /* ── TESTING CTA ── */
+  .testing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .tool-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+  }
+  .tool-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .tool-card p { color: var(--text-muted); font-size: 0.875rem; }
+  .tool-badge {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(34,197,94,0.1);
+    color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.25);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  footer img { height: 28px; margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="logo.png" alt="Velyon">
+  <ul>
+    <li><a href="#slogans">Top Slogans</a></li>
+    <li><a href="#humans">People</a></li>
+    <li><a href="#diagrams">Diagrams</a></li>
+    <li><a href="#email">Email Aliases</a></li>
+    <li><a href="#taglines">Taglines</a></li>
+    <li><a href="#testing">Testing</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">&#9679; Marketing Strategy Report</div>
+  <h1>Velyon Marketing<br>& Visual Assets</h1>
+  <p>A comprehensive analysis of slogans, taglines, email strategies, and visual identity assets generated for Velyon.io.</p>
+  <div class="hero-meta">
+    <span>&#128197; <strong>April 2026</strong></span>
+    <span>&#128196; <strong>20 AI Images Generated</strong></span>
+    <span>&#128172; <strong>200+ Slogans Analysed</strong></span>
+    <span>&#128231; <strong>120 Email Aliases</strong></span>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- TOP 5 SLOGANS -->
+<section id="slogans">
+  <div class="section-label">Predictive Analysis</div>
+  <h2 class="section-title">Top 5 Recommended Slogans</h2>
+  <p class="section-sub">Ranked by predicted B2B engagement based on emotional contrast, rhythmic syntax, and direct value proposition alignment with Velyon's positioning.</p>
+  <div class="top5-grid">
+    <div class="top5-card">
+      <div class="rank">01</div>
+      <div>
+        <h3>Fix the workflow. Free the workforce.</h3>
+        <p>We identify the internal bottlenecks draining your time and implement intelligent automation to give your people their day back.</p>
+        <span class="why-badge">Top Pick — Emotional contrast + rhythmic punch</span>
+      </div>
+    </div>
+    <div class="top5-card">
+      <div class="rank">02</div>
+      <div>
+        <h3>We don't replace your team. We unlock them.</h3>
+        <p>Our AI solutions serve as an invisible growth engine that supports your staff, reduces their frustration, and amplifies their output.</p>
+        <span class="why-badge">Best — Directly neutralises the AI replacement fear</span>
+      </div>
+    </div>
+    <div class="top5-card">
+      <div class="rank">03</div>
+      <div>
+        <h3>Stop paying smart people to do mindless work.</h3>
+        <p>We help forward-thinking companies eliminate copy-paste busywork so their teams can focus on high-value development and closing deals.</p>
+        <span class="why-badge">Best CFO/CEO appeal — Agitates wasted payroll pain</span>
+      </div>
+    </div>
+    <div class="top5-card">
+      <div class="rank">04</div>
+      <div>
+        <h3>Automate the monotonous. Accelerate the meaningful.</h3>
+        <p>Your smartest employees shouldn't be bogged down with repetitive tasks; let our AI systems handle the grind so your team drives strategy.</p>
+        <span class="why-badge">Best for premium positioning — Alliteration drives recall</span>
+      </div>
+    </div>
+    <div class="top5-card">
+      <div class="rank">05</div>
+      <div>
+        <h3>Turn wasted time into found revenue.</h3>
+        <p>Every hour your team spends in disjointed systems is an hour they aren't generating profit — let us automate the difference.</p>
+        <span class="why-badge">Best revenue ops angle — Time = Money equation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HUMAN IMAGES -->
+<section id="humans">
+  <div class="section-label">Visual Identity — People</div>
+  <h2 class="section-title">Human-Centric Scenarios</h2>
+  <p class="section-sub">10 photorealistic AI-generated images depicting real-world professionals empowered by intelligent automation across key industries.</p>
+  <div class="img-grid">
+    <div class="img-card">
+      <img src="human_executive_dashboard_1775625407406.png" alt="Modern Executive">
+      <div class="img-card-body">
+        <div class="img-card-tag">Leadership</div>
+        <div class="img-card-title">The Modern Executive</div>
+        <p class="img-card-desc">Reviewing a consolidated AI dashboard with clarity and confidence. Intelligence at her fingertips.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_healthcare_admin_1775625422520.png" alt="Healthcare">
+      <div class="img-card-body">
+        <div class="img-card-tag">Healthcare</div>
+        <div class="img-card-title">Freeing Humans to Care</div>
+        <p class="img-card-desc">A healthcare admin having a direct human conversation while AI automates routing in the background.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_financial_analyst_1775625436557.png" alt="Finance">
+      <div class="img-card-body">
+        <div class="img-card-tag">Finance</div>
+        <div class="img-card-title">The End of the Daily Grind</div>
+        <p class="img-card-desc">A financial analyst free from data processing, with complex analytics flowing seamlessly in the background.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_manufacturing_leader_1775625485932.png" alt="Manufacturing">
+      <div class="img-card-body">
+        <div class="img-card-tag">Manufacturing</div>
+        <div class="img-card-title">Scaling Without Stretching</div>
+        <p class="img-card-desc">A logistics director commanding an automated operation — fully in control, completely unburdened.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_legal_command_1775625506737.png" alt="Legal">
+      <div class="img-card-body">
+        <div class="img-card-tag">Legal</div>
+        <div class="img-card-title">Intellect Over Robotics</div>
+        <p class="img-card-desc">A focused corporate lawyer engaged purely in strategic legal work, free from administrative burden.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_sales_closer_1775625665045.png" alt="Sales">
+      <div class="img-card-body">
+        <div class="img-card-tag">Sales</div>
+        <div class="img-card-title">Humans Do The Closing</div>
+        <p class="img-card-desc">A sales executive building genuine human connection while AI manages the CRM behind the scenes.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_supply_chain_1775771754388.png" alt="Supply Chain">
+      <div class="img-card-body">
+        <div class="img-card-tag">Logistics</div>
+        <div class="img-card-title">Relieved by Automation</div>
+        <p class="img-card-desc">A supply chain manager, visibly at ease, watching predictive routing systems handle the complexity.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_customer_success_1775772617190.png" alt="Customer Success">
+      <div class="img-card-body">
+        <div class="img-card-tag">Customer Support</div>
+        <div class="img-card-title">Zero Burnout. Maximum Output.</div>
+        <p class="img-card-desc">A customer success agent smiling warmly at their monitor. AI handles Tier-1 so they handle relationships.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_operations_director_1775772676496.png" alt="Operations">
+      <div class="img-card-body">
+        <div class="img-card-tag">Operations</div>
+        <div class="img-card-title">Fix the Workflow. Free the Workforce.</div>
+        <p class="img-card-desc">An operations director standing proud in a technology environment — fully empowered, not replaced.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="human_strategic_boardroom_1775772787280.png" alt="Boardroom">
+      <div class="img-card-body">
+        <div class="img-card-tag">Executive Strategy</div>
+        <div class="img-card-title">More Time Strategising</div>
+        <p class="img-card-desc">A diverse executive team in high-level strategic discussion — because AI freed them from the daily grind.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- DIAGRAM IMAGES -->
+<section id="diagrams">
+  <div class="section-label">Visual Identity — Systems</div>
+  <h2 class="section-title">Infographic & Diagram Assets</h2>
+  <p class="section-sub">10 premium dark-mode abstract visualisations illustrating Velyon's core concepts — pipeline flow, bottleneck removal, and compounding revenue.</p>
+  <div class="img-grid">
+    <div class="img-card">
+      <img src="diagram_revenue_multiplier_1775773091375.png" alt="Revenue Multiplier">
+      <div class="img-card-body">
+        <div class="img-card-tag">Systems</div>
+        <div class="img-card-title">The Revenue Multiplier</div>
+        <p class="img-card-desc">Scale your output without scaling your headcount — data streams branching exponentially from a central human node.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_unclog_pipeline_1775773120911.png" alt="Unclog Pipeline">
+      <div class="img-card-body">
+        <div class="img-card-tag">Flow</div>
+        <div class="img-card-title">Where There's Friction, We Build Flow</div>
+        <p class="img-card-desc">Tangled red friction lines instantly transform into hyper-fast blue laser streams through an AI prism.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_remove_busywork_1775773138244.png" alt="Remove Busywork">
+      <div class="img-card-body">
+        <div class="img-card-tag">Automation</div>
+        <div class="img-card-title">The End of Busywork</div>
+        <p class="img-card-desc">Heavy archaic gears crumbling and transforming into sleek glowing digital geometry.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_revenue_funnel_1775773153977.png" alt="Revenue Funnel">
+      <div class="img-card-body">
+        <div class="img-card-tag">Pipeline</div>
+        <div class="img-card-title">The Fractional CRO Engine</div>
+        <p class="img-card-desc">Fragmented data particles enter. An AI core organises them. Gold revenue exits at the base.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_support_triage_1775773173325.png" alt="Support Triage">
+      <div class="img-card-body">
+        <div class="img-card-tag">Support Automation</div>
+        <div class="img-card-title">Intelligent Support Triage</div>
+        <p class="img-card-desc">80% of queries resolved autonomously by the AI shield. 20% passed cleanly to specialist humans.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_roi_gauge_1775773203199.png" alt="ROI Gauge">
+      <div class="img-card-body">
+        <div class="img-card-tag">ROI Guarantee</div>
+        <div class="img-card-title">The 2X ROI Gauge</div>
+        <p class="img-card-desc">A glassmorphism dashboard gauge glowing as it surpasses the 200% milestone. The guarantee, visualised.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_human_machine_symbiosis_1775773227544.png" alt="Symbiosis">
+      <div class="img-card-body">
+        <div class="img-card-tag">Philosophy</div>
+        <div class="img-card-title">Human & Machine Symbiosis</div>
+        <p class="img-card-desc">Warm amber human form and cool electric-blue AI geometry interlocking in perfect harmony.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_break_bottleneck_1775773246450.png" alt="Break Bottleneck">
+      <div class="img-card-body">
+        <div class="img-card-tag">Bottlenecks</div>
+        <div class="img-card-title">Breaking the Bottleneck</div>
+        <p class="img-card-desc">An hourglass neck exploding outward as a digital stream bypasses the restriction entirely.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_command_center_ui_1775773264033.png" alt="Command Center">
+      <div class="img-card-body">
+        <div class="img-card-tag">Interface</div>
+        <div class="img-card-title">The Command Centre Interface</div>
+        <p class="img-card-desc">A pristine dark-mode workflow dashboard — organised, elegant, and bearing the Automation Active status.</p>
+      </div>
+    </div>
+    <div class="img-card">
+      <img src="diagram_elevate_workforce_1775773277265.png" alt="Elevate Workforce">
+      <div class="img-card-body">
+        <div class="img-card-tag">Empowerment</div>
+        <div class="img-card-title">Elevating the Workforce</div>
+        <p class="img-card-desc">Heavy dim orbs ascending through an automation barrier, bursting into brilliant, fast-moving light.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EMAIL ALIASES -->
+<section id="email">
+  <div class="section-label">Email Strategy</div>
+  <h2 class="section-title">Email Alias Recommendations</h2>
+  <p class="section-sub">Modern, action-oriented email addresses using hyphens for clarity. Grouped by strategic intent.</p>
+  <table class="email-table">
+    <thead>
+      <tr>
+        <th>Email Address</th>
+        <th>Category</th>
+        <th>Strategic Intent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="email-address">scale-with-ai@velyon.io</td><td>AI Buzzword</td><td>Top-of-funnel brand awareness</td></tr>
+      <tr><td class="email-address">auto-growth@velyon.io</td><td>Growth</td><td>Automated lead nurturing campaigns</td></tr>
+      <tr><td class="email-address">smart-leads@velyon.io</td><td>Lead Generation</td><td>Inbound lead capture alias</td></tr>
+      <tr><td class="email-address">sales-agent@velyon.io</td><td>Sales Automation</td><td>Sales agent outreach sequences</td></tr>
+      <tr><td class="email-address">support-agent@velyon.io</td><td>Customer Service</td><td>AI support triage communications</td></tr>
+      <tr><td class="email-address">fix-the-workflow@velyon.io</td><td>Positioning</td><td>Primary outbound prospecting</td></tr>
+      <tr><td class="email-address">free-the-workforce@velyon.io</td><td>Positioning</td><td>HR & People Ops decision maker outreach</td></tr>
+      <tr><td class="email-address">unlock-growth@velyon.io</td><td>Benefit</td><td>Growth-stage startup outreach</td></tr>
+      <tr><td class="email-address">double-roi@velyon.io</td><td>Guarantee</td><td>ROI guarantee campaigns</td></tr>
+      <tr><td class="email-address">auto-close@velyon.io</td><td>Sales</td><td>Sales velocity campaigns</td></tr>
+      <tr><td class="email-address">agent-outreach@velyon.io</td><td>Lead Gen</td><td>AI agent prospecting sequences</td></tr>
+      <tr><td class="email-address">core-intel@velyon.io</td><td>AI Buzzword</td><td>Executive intelligence briefings</td></tr>
+      <tr><td class="email-address">swift-scale@velyon.io</td><td>Action</td><td>Fast-growth mid-market outreach</td></tr>
+      <tr><td class="email-address">data-flow@velyon.io</td><td>Systems</td><td>Data & ops automation campaigns</td></tr>
+      <tr><td class="email-address">human-led-ai@velyon.io</td><td>Philosophy</td><td>Anti-replacement positioning campaigns</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="divider">
+
+<!-- TAGLINE PAIRS -->
+<section id="taglines">
+  <div class="section-label">Paired Taglines</div>
+  <h2 class="section-title">Headline + Supporting Statement</h2>
+  <p class="section-sub">20 paired taglines for use in hero sections, LinkedIn banners, email headers, and ad creative.</p>
+  <div class="pair-grid">
+    <div class="pair-card"><h4>Fix the workflow. Free the workforce.</h4><p>We identify the internal bottlenecks draining your time and implement intelligent automation to give your people their day back.</p></div>
+    <div class="pair-card"><h4>Automate the monotonous. Accelerate the meaningful.</h4><p>Your smartest employees shouldn't be bogged down with repetitive tasks; let our AI systems handle the grind so your team can drive strategy.</p></div>
+    <div class="pair-card"><h4>Built for scale. Designed for humans.</h4><p>We don't deploy technology to replace your talent — we deploy intelligent systems that take the friction out of their daily operations.</p></div>
+    <div class="pair-card"><h4>Where there's friction, we build flow.</h4><p>We audit your processes to find where human latency is killing productivity, and we build AI solutions to bridge the gap.</p></div>
+    <div class="pair-card"><h4>Stop paying smart people to do mindless work.</h4><p>We help forward-thinking companies eliminate the copy-paste busywork so their teams can focus on high-value development and closing deals.</p></div>
+    <div class="pair-card"><h4>Less friction. More focus.</h4><p>By removing the laborious administrative tasks from your business, we create the operational space your team needs to thrive.</p></div>
+    <div class="pair-card"><h4>Taking the robot out of the human.</h4><p>We automate the predictable, low-variance data tasks so your employees can get back to building relationships and driving revenue.</p></div>
+    <div class="pair-card"><h4>We don't replace your team. We unlock them.</h4><p>Our AI solutions serve as an invisible growth engine that supports your staff, reduces their frustration, and amplifies their output.</p></div>
+    <div class="pair-card"><h4>Empower the human. Automate the routine.</h4><p>Technology should make your workforce faster and happier — we build systems that handle the labour and leave the thinking to you.</p></div>
+    <div class="pair-card"><h4>The end of copy, paste, and catch-up.</h4><p>Reclaim the thousands of hours lost to messy back-office operations and redirect that energy into direct business growth.</p></div>
+    <div class="pair-card"><h4>Remove the limits on your talent.</h4><p>When you stop treating your people like processors, you unlock an entirely new level of efficiency, creativity, and profitability.</p></div>
+    <div class="pair-card"><h4>Efficiency isn't working harder. It's working smarter.</h4><p>We streamline your operations with tailored AI agents, reducing operational costs while dramatically improving your service velocity.</p></div>
+    <div class="pair-card"><h4>Don't outwork the problem. Outsmart the process.</h4><p>Adding more headcount to a broken system just scales the chaos — we use automation to fix the foundation so your business can truly scale.</p></div>
+    <div class="pair-card"><h4>We turn wasted time into found revenue.</h4><p>Every hour your team spends digging through disjointed systems is an hour they aren't generating profit — let us automate the difference.</p></div>
+    <div class="pair-card"><h4>Clear the clutter. Compound the revenue.</h4><p>We eliminate operational frustration with AI-driven pipelines that make your entire business run faster, leaner, and stronger.</p></div>
+    <div class="pair-card"><h4>Why waste human talent on robotic tasks?</h4><p>Your people were hired to innovate, connect, and lead — not to spend their days fighting with inefficient, disconnected software.</p></div>
+    <div class="pair-card"><h4>Scale your output, not your payroll.</h4><p>Our digital agents handle top-of-funnel tasks and support triage natively, allowing you to handle 10x the volume without adding headcount.</p></div>
+    <div class="pair-card"><h4>Eliminate the drag. Protect the talent.</h4><p>We find the specific operational roadblocks causing burnout in your organisation and permanently solve them with strategic automation.</p></div>
+    <div class="pair-card"><h4>Let the machines do the heavy lifting.</h4><p>We design 24/7 intelligent systems that manage the mundane, finally freeing your human capital to do what they do best.</p></div>
+    <div class="pair-card"><h4>Make your operations as smart as your people.</h4><p>We close the gap between your team's vast potential and the frustrating, slow processes that are currently holding them back.</p></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TESTING -->
+<section id="testing">
+  <div class="section-label">Next Steps</div>
+  <h2 class="section-title">Recommended Testing Approach</h2>
+  <p class="section-sub">Tools and methods to validate which slogans perform best before committing your brand to a primary tagline.</p>
+  <div class="testing-grid">
+    <div class="tool-card">
+      <h4>Anyword — Predictive Scoring</h4>
+      <p>Plug your top taglines into Anyword's Score Panel for a data-driven predictive performance rating against millions of B2B campaigns.</p>
+      <span class="tool-badge">7-Day Free Trial</span>
+    </div>
+    <div class="tool-card">
+      <h4>PickFu — Head-to-Head Polls</h4>
+      <p>Run your top 4 slogans in a direct head-to-head poll targeted at B2B professionals. Get qualitative written reasoning within hours.</p>
+      <span class="tool-badge">Pay-per-poll</span>
+    </div>
+    <div class="tool-card">
+      <h4>Wynter — B2B Message Testing</h4>
+      <p>Test messaging directly with verified B2B roles including VPs of Sales, Operations Directors, and CFOs — your exact ICP.</p>
+      <span class="tool-badge">Free Trial Available</span>
+    </div>
+    <div class="tool-card">
+      <h4>LinkedIn Micro-Ad Test</h4>
+      <p>Run 3-5 taglines as separate LinkedIn ads with identical creative. Measure CTR after £50 spend. The winner is mathematically proven.</p>
+      <span class="tool-badge">Live Market Data</span>
+    </div>
+    <div class="tool-card">
+      <h4>CoSchedule Headline Analyzer</h4>
+      <p>Free instant analysis of emotional impact, word balance, and clarity for any short-form tagline or slogan.</p>
+      <span class="tool-badge">100% Free</span>
+    </div>
+    <div class="tool-card">
+      <h4>Hero Section A/B Test</h4>
+      <p>Deploy the final 2 slogans as A/B variants on Velyon.io's hero section. Measure which generates more booked discovery calls over 30 days.</p>
+      <span class="tool-badge">Highest Confidence</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logo.png" alt="Velyon">
+  <p>© 2026 Velyon — All Rights Reserved. Confidential Marketing Strategy Document.</p>
+</footer>
+
+</body>
+</html>

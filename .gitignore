@@ -1,11 +1,43 @@
+# ─── VELYON LEGAL COMMAND CENTER — .gitignore ─────────────────────────────
+
+# Watcher runtime files (prevent self-triggering loops)
+inventory_watcher.log
+files_registry.json
+
+# Nested git repositories (CRITICAL — prevents git add -A exit code 128)
+_github_los_romeros_repo/
+_github_*/
+*/.git/
+
+# Antigravity brain/session files (managed separately, not committed to repo)
+.gemini/
+antigravity/brain/
+
 # VS Code
 .vscode/
+*.code-workspace
 
-# Temporary files
-*.tmp
-*.bak
-*.swp
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
 
-# OS generated files
+# Node
+node_modules/
+
+# OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+*.tmp
+*.temp
+~$*
+
+# Temp folder init placeholders
+.folder_init/
+**/.keep

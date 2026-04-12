@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate HTML Builder Prompt | Velyon</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        velyon: {
+                            obsidian: '#0A0A0A',
+                            graphite: '#171717',
+                            offwhite: '#F5F5F5',
+                            grey: '#A3A3A3',
+                            azure: '#1D4ED8',
+                            cyan: '#00F0FF',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            background-color: #0A0A0A;
+            color: #F5F5F5;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glows */
+        .ambient-glow {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 100% 50%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 0% 100%, rgba(29, 78, 216, 0.1) 0%, transparent 40%);
+            z-index: 0;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background-color: rgba(23, 23, 23, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .interactive-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .interactive-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(0, 240, 255, 0.15), inset 0 1px 0 rgba(0, 240, 255, 0.2);
+            transform: translateY(-4px) scale(1.01);
+            background-color: rgba(30, 30, 30, 0.8);
+        }
+
+        /* Code Block */
+        .code-window {
+            background: linear-gradient(180deg, rgba(23,23,23,0.95) 0%, rgba(10,10,10,0.95) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+        }
+        .code-window-header {
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #171717; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb:hover { background: #A3A3A3; }
+        
+        /* Shimmer */
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+        /* ─── Builder Form Styles ─── */
+        .builder-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            color: #F5F5F5;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            outline: none;
+            resize: vertical;
+        }
+        .builder-input::placeholder { color: #404040; }
+        .builder-input:focus {
+            border-color: rgba(0, 240, 255, 0.4);
+            background: rgba(0, 240, 255, 0.03);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.07);
+        }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 10px; border-radius: 8px;
+            cursor: pointer; transition: background 0.2s;
+            user-select: none;
+        }
+        .toggle-row:hover { background: rgba(255,255,255,0.04); }
+        .builder-toggle {
+            position: relative; width: 36px; min-width: 36px; height: 20px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease; flex-shrink: 0;
+        }
+        .builder-toggle::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: #404040; transition: all 0.3s ease;
+        }
+        .toggle-row input:checked ~ .builder-toggle {
+            background: rgba(0, 240, 255, 0.2);
+            border-color: rgba(0, 240, 255, 0.5);
+        }
+        .toggle-row input:checked ~ .builder-toggle::after {
+            background: #00F0FF; transform: translateX(16px);
+        }
+
+        /* Save Option Radio Rows */
+        .save-opt-label {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 10px; border-radius: 8px;
+            border: 1px solid transparent;
+            cursor: pointer; transition: all 0.2s; user-select: none;
+        }
+        .save-opt-label:hover { background: rgba(255,255,255,0.04); }
+        .save-opt-label.active {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.2);
+        }
+        .save-opt-dot {
+            width: 14px; min-width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.2s; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .save-opt-label.active .save-opt-dot {
+            border-color: #00F0FF;
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+        }
+        .save-opt-label.active .save-opt-dot::after {
+            content: ''; width: 6px; height: 6px;
+            border-radius: 50%; background: #00F0FF;
+        }
+
+        /* Prompt output highlight states */
+        .prompt-user-val   { color: #FCD34D; font-weight: 600; } /* amber = user's values */
+        .prompt-fill-val   { color: #00F0FF; font-weight: 600; } /* cyan  = unfilled placeholders */
+
+        /* Generate Button */
+        #generate-btn {
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 13px 20px; border-radius: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px; font-weight: 700;
+            cursor: pointer; border: none;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #00F0FF 0%, #1D4ED8 100%);
+            color: #0A0A0A;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+        #generate-btn:hover {
+            box-shadow: 0 0 38px rgba(0, 240, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        #generate-btn:active { transform: scale(0.98); }
+        #generate-btn.success {
+            background: linear-gradient(135deg, #10B981 0%, #065F46 100%);
+            color: #F5F5F5;
+            box-shadow: 0 0 22px rgba(16, 185, 129, 0.35);
+        }
+
+        /* Section label */
+        .field-label {
+            display: block; font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+            text-transform: uppercase; color: #737373; margin-bottom: 6px;
+        }
+        .field-label .req { color: #00F0FF; }
+
+        /* Step circle */
+        .step-num {
+            height: 20px; width: 20px; border-radius: 50%;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 10px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="font-body antialiased min-h-screen selection:bg-velyon-cyan/30 selection:text-velyon-offwhite">
+
+    <div class="ambient-glow"></div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 z-50 w-full border-b border-white/5 bg-velyon-obsidian/80 backdrop-blur-md transition-all duration-300">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between max-w-7xl">
+            <div class="flex items-center gap-3">
+                <img src="./velyon-logo-web-site-image.png" alt="VELYON Logo" class="h-8 w-auto object-contain" onerror="this.src='https://placehold.co/120x40/0A0A0A/F5F5F5.png?text=VELYON'">
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#features" class="font-heading text-sm font-medium text-velyon-grey hover:text-velyon-offwhite transition-colors duration-300">Features</a>
+                <a href="#prompt" class="font-heading text-sm font-medium text-velyon-grey hover:text-velyon-offwhite transition-colors duration-300">Builder</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <a href="#prompt" class="font-heading relative overflow-hidden group inline-flex items-center justify-center rounded-md text-sm font-semibold transition-all duration-500 focus-visible:outline-none bg-gradient-to-r from-velyon-cyan to-[#80F8FF] border border-white/50 text-velyon-obsidian shadow-[0_0_20px_rgba(0,240,255,0.2)] hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] h-9 px-4">
+                    <span class="relative z-10 flex items-center">Build My Prompt</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/60 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-24">
+        
+        <!-- Hero Section -->
+        <section class="container mx-auto px-6 max-w-7xl relative pt-12 lg:pt-20">
+            <div class="flex flex-col items-center text-center space-y-8 relative z-20 max-w-4xl mx-auto">
+                
+                <div class="inline-flex items-center rounded-full border border-velyon-cyan/30 bg-velyon-cyan/10 px-4 py-1.5 text-sm font-medium text-velyon-cyan font-heading transition-all duration-300 hover:bg-velyon-cyan/20 animate-fade-in-up">
+                    <span class="relative flex h-2 w-2 mr-2 border-none">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-velyon-cyan opacity-75 border-none"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-velyon-cyan border-none"></span>
+                    </span>
+                    Agentic Coding Protocol 1.0
+                </div>
+
+                <h1 class="font-heading text-5xl md:text-7xl font-bold tracking-tight text-velyon-offwhite leading-[1.1] animate-fade-in-up" style="animation-delay: 100ms;">
+                    The Ultimate <br/>
+                    <span class="relative inline-block mt-2">
+                        <span class="absolute -inset-2 bg-gradient-to-r from-velyon-azure/20 to-velyon-cyan/20 blur-xl"></span>
+                        <span class="relative bg-gradient-to-r from-white via-velyon-cyan to-velyon-azure bg-clip-text text-transparent">HTML Builder Prompt</span>
+                    </span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-velyon-grey max-w-2xl font-body font-light leading-relaxed animate-fade-in-up" style="animation-delay: 200ms;">
+                    Stop getting generic AI slop. Fill in your details below, hit Generate, and get a complete production-grade prompt ready to paste into your agent.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 pt-6 animate-fade-in-up" style="animation-delay: 300ms;">
+                    <a href="#prompt" class="font-heading group relative overflow-hidden flex items-center justify-center rounded-md text-base font-bold transition-all duration-500 bg-gradient-to-r from-white to-velyon-offwhite border border-white/50 text-velyon-obsidian shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] h-12 px-8">
+                        <span class="relative z-10 flex items-center">Build My Prompt <i data-lucide="arrow-down" class="ml-2 h-5 w-5 opacity-80"></i></span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                    </a>
+                    <a href="#features" class="font-heading inline-flex items-center justify-center rounded-md text-base font-medium transition-all duration-300 bg-black/40 backdrop-blur-md border border-white/10 text-velyon-offwhite hover:bg-white/10 hover:border-white/20 h-12 px-8">
+                        See How It Works
+                    </a>
+                </div>
+            </div>
+
+            <!-- Floating UI Elements -->
+            <div class="relative mt-20 md:mt-24 w-full max-w-5xl mx-auto h-[400px] sm:h-[500px] animate-fade-in-up" style="animation-delay: 400ms;">
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl code-window rounded-xl overflow-hidden z-20">
+                    <div class="code-window-header px-4 py-3 flex items-center gap-2">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                        </div>
+                        <div class="ml-4 font-mono text-xs text-velyon-grey">prompt.txt</div>
+                    </div>
+                    <div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto">
+                        <span class="text-pink-400">/ui</span> <span class="text-blue-300">Use the</span> <span class="text-green-300">frontend-design</span> <span class="text-blue-300">skill</span>,<br>
+                        <span class="text-green-300">ui-ux-pro-max</span> <span class="text-blue-300">skill</span>, <span class="text-blue-300">and</span><br>
+                        <span class="text-yellow-300">mcp_magic_21st_magic_component_builder</span><br><br>
+                        <span class="text-neutral-500">// Fill in your details below ↓</span><br>
+                        <span class="text-blue-200">to build me a premium landing page for</span> <span class="text-velyon-cyan font-semibold animate-pulse">[YOUR APP IDEA]</span>.<br><br>
+                        <span class="text-purple-300">Apply Dark mode premium aesthetic</span><br>
+                        <span class="text-purple-300">with glassmorphism and depth...</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex absolute left-0 top-1/4 glass-card rounded-xl p-4 flex-col gap-3 w-48 z-30 animate-float">
+                    <div class="flex items-center gap-3">
+                        <div class="h-8 w-8 rounded-full bg-velyon-azure/20 flex items-center justify-center">
+                            <i data-lucide="sparkles" class="h-4 w-4 text-velyon-cyan"></i>
+                        </div>
+                        <div class="font-heading text-sm font-semibold">UI UX Pro Max</div>
+                    </div>
+                    <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-velyon-cyan w-[85%]"></div>
+                    </div>
+                </div>
+                <div class="hidden md:flex absolute right-0 bottom-1/4 glass-card rounded-xl p-5 flex-col gap-3 w-56 z-10 animate-float-delayed">
+                    <div class="font-heading text-xs uppercase tracking-widest text-velyon-grey mb-1">Aesthetic Check</div>
+                    <div class="flex gap-2 items-center text-sm"><i data-lucide="check-circle-2" class="h-4 w-4 text-green-400"></i> Glassmorphism</div>
+                    <div class="flex gap-2 items-center text-sm"><i data-lucide="check-circle-2" class="h-4 w-4 text-green-400"></i> Typography Pairings</div>
+                    <div class="flex gap-2 items-center text-sm"><i data-lucide="check-circle-2" class="h-4 w-4 text-green-400"></i> Fluid Animations</div>
+                </div>
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-velyon-azure/20 blur-[100px] z-0 rounded-full animate-pulse-slow"></div>
+            </div>
+        </section>
+
+        <!-- Features Matrix -->
+        <section id="features" class="container mx-auto px-6 max-w-7xl pt-32">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4">Engineered for Perfection</h2>
+                <p class="text-velyon-grey max-w-2xl mx-auto font-light">Why this prompt produces dramatically better results than standard AI queries.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card interactive-card p-8 rounded-xl font-body">
+                    <div class="h-12 w-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+                        <i data-lucide="layers" class="h-6 w-6 text-velyon-offwhite"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3">Skill Orchestration</h3>
+                    <p class="text-velyon-grey text-sm leading-relaxed">Forces the agent to simultaneously load the UI/UX intelligence system and the frontend design directive before writing a single line of code.</p>
+                </div>
+                <div class="glass-card interactive-card p-8 rounded-xl font-body border-velyon-cyan/20">
+                    <div class="h-12 w-12 rounded-lg bg-velyon-cyan/10 border border-velyon-cyan/20 flex items-center justify-center mb-6">
+                        <i data-lucide="wand-2" class="h-6 w-6 text-velyon-cyan"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3">Magic Components</h3>
+                    <p class="text-velyon-grey text-sm leading-relaxed">Activates the 21st.dev MCP tool automatically, sourcing premium React and shadcn-style components instead of hallucinating basic HTML.</p>
+                </div>
+                <div class="glass-card interactive-card p-8 rounded-xl font-body">
+                    <div class="h-12 w-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+                        <i data-lucide="ruler" class="h-6 w-6 text-velyon-offwhite"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3">Constrained Creativity</h3>
+                    <p class="text-velyon-grey text-sm leading-relaxed">Explicit limiters ("NOT Inter/Roboto", "No emojis as icons") prevent the model from defaulting to the generic AI aesthetic it was trained on.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── INTERACTIVE PROMPT BUILDER ─── -->
+        <section id="prompt" class="container mx-auto px-6 max-w-7xl pt-32">
+
+            <div class="text-center mb-14">
+                <div class="inline-flex items-center gap-2 rounded-full border border-velyon-azure/30 bg-velyon-azure/10 px-4 py-1.5 text-xs font-heading font-semibold text-velyon-azure/80 mb-5">
+                    <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> Interactive Prompt Builder
+                </div>
+                <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4">Fill In → Generate → Copy</h2>
+                <p class="text-velyon-grey max-w-xl mx-auto font-light text-sm">Complete the form on the left. Click Generate and your personalised prompt appears instantly on the right — ready to paste.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+
+                <!-- ─── LEFT: Builder Form ─── -->
+                <div class="lg:col-span-2 flex flex-col gap-4" id="builder-sidebar">
+
+                    <!-- Step 1: Project Details -->
+                    <div class="glass-card rounded-xl p-5 border-velyon-cyan/20">
+                        <div class="flex items-center gap-2.5 mb-4">
+                            <div class="step-num bg-velyon-cyan text-velyon-obsidian">1</div>
+                            <h4 class="font-heading text-sm font-bold text-velyon-offwhite">Project Details</h4>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="field-label">Product / Page Description <span class="req">*</span></label>
+                                <textarea id="field-product" rows="3" placeholder="e.g. Velyon AI consultancy — premium legal services landing page" class="builder-input"></textarea>
+                            </div>
+                            <div>
+                                <label class="field-label">Company Name</label>
+                                <input id="field-company" type="text" placeholder="e.g. Velyon" class="builder-input">
+                            </div>
+                            <div>
+                                <label class="field-label">Logo File / URL</label>
+                                <input id="field-logo" type="text" placeholder="e.g. ./velyon-logo.png" class="builder-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Optional Modules -->
+                    <div class="glass-card rounded-xl p-5 border-white/5">
+                        <div class="flex items-center gap-2.5 mb-3">
+                            <div class="step-num bg-white/15 text-velyon-offwhite">2</div>
+                            <h4 class="font-heading text-sm font-bold text-velyon-offwhite">Optional Modules</h4>
+                        </div>
+                        <div class="space-y-0.5">
+                            <label class="toggle-row">
+                                <input type="checkbox" id="toggle-hero" checked class="sr-only">
+                                <div class="builder-toggle"></div>
+                                <div>
+                                    <div class="text-xs font-heading font-semibold text-velyon-offwhite">Generate Hero Images</div>
+                                    <div class="text-[11px] text-velyon-grey">AI-generated visuals, no placeholders</div>
+                                </div>
+                            </label>
+                            <label class="toggle-row">
+                                <input type="checkbox" id="toggle-copy" checked class="sr-only">
+                                <div class="builder-toggle"></div>
+                                <div>
+                                    <div class="text-xs font-heading font-semibold text-velyon-offwhite">Copy &amp; Messaging</div>
+                                    <div class="text-[11px] text-velyon-grey">Copywriting skill for conversion</div>
+                                </div>
+                            </label>
+                            <label class="toggle-row">
+                                <input type="checkbox" id="toggle-brand" class="sr-only">
+                                <div class="builder-toggle"></div>
+                                <div>
+                                    <div class="text-xs font-heading font-semibold text-velyon-offwhite">Brand Alignment</div>
+                                    <div class="text-[11px] text-velyon-grey">Apply your brand design system</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Save Location -->
+                    <div class="glass-card rounded-xl p-5 border-white/5">
+                        <div class="flex items-center gap-2.5 mb-3">
+                            <div class="step-num bg-white/15 text-velyon-offwhite">3</div>
+                            <h4 class="font-heading text-sm font-bold text-velyon-offwhite">Save Location</h4>
+                        </div>
+                        <div class="space-y-1 mb-4">
+                            <label class="save-opt-label active" id="opt-label-A" onclick="selectSaveOpt('A')">
+                                <input type="radio" name="save-opt" id="radio-A" value="A" checked class="sr-only">
+                                <div class="save-opt-dot"></div>
+                                <span class="text-xs font-heading font-semibold text-velyon-offwhite">A — Local Workspace</span>
+                            </label>
+                            <label class="save-opt-label" id="opt-label-B" onclick="selectSaveOpt('B')">
+                                <input type="radio" name="save-opt" id="radio-B" value="B" class="sr-only">
+                                <div class="save-opt-dot"></div>
+                                <span class="text-xs font-heading font-semibold text-velyon-offwhite">B — Google Drive</span>
+                            </label>
+                            <label class="save-opt-label" id="opt-label-C" onclick="selectSaveOpt('C')">
+                                <input type="radio" name="save-opt" id="radio-C" value="C" class="sr-only">
+                                <div class="save-opt-dot"></div>
+                                <span class="text-xs font-heading font-semibold text-velyon-offwhite">C — GitHub Repo</span>
+                            </label>
+                            <label class="save-opt-label" id="opt-label-D" onclick="selectSaveOpt('D')">
+                                <input type="radio" name="save-opt" id="radio-D" value="D" class="sr-only">
+                                <div class="save-opt-dot"></div>
+                                <span class="text-xs font-heading font-semibold text-velyon-offwhite">D — All of the Above</span>
+                            </label>
+                        </div>
+                        <!-- Conditional Fields -->
+                        <div class="space-y-3 pt-3 border-t border-white/5">
+                            <div>
+                                <label class="field-label">Page File Name</label>
+                                <input id="field-page-name" type="text" placeholder="e.g. velyon-landing" class="builder-input">
+                            </div>
+                            <div id="fields-A">
+                                <label class="field-label">Subfolder</label>
+                                <input id="field-subfolder" type="text" placeholder="e.g. pages or output" class="builder-input">
+                            </div>
+                            <div id="fields-B" class="hidden">
+                                <label class="field-label">Google Drive Folder</label>
+                                <input id="field-drive-folder" type="text" placeholder="e.g. Landing Pages" class="builder-input">
+                            </div>
+                            <div id="fields-C" class="hidden space-y-3">
+                                <div>
+                                    <label class="field-label">GitHub Username</label>
+                                    <input id="field-github-user" type="text" placeholder="e.g. dean349" class="builder-input">
+                                </div>
+                                <div>
+                                    <label class="field-label">GitHub Repo Name</label>
+                                    <input id="field-github-repo" type="text" placeholder="e.g. velyon-design-system" class="builder-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button id="generate-btn" onclick="generatePrompt()">
+                        <i data-lucide="zap" class="h-5 w-5"></i>
+                        Generate My Prompt
+                    </button>
+                    <p class="text-center text-[11px] text-velyon-grey/40 font-heading -mt-1">Fill in Step 1 at minimum, then click Generate</p>
+                </div>
+
+                <!-- ─── RIGHT: Prompt Output ─── -->
+                <div class="lg:col-span-3">
+                    <div class="glass-card rounded-2xl relative overflow-hidden border-velyon-azure/30 flex flex-col" style="min-height: 600px;">
+                        <div class="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                            <i data-lucide="terminal-square" class="w-64 h-64"></i>
+                        </div>
+                        
+                        <!-- Header -->
+                        <div class="px-6 py-4 border-b border-white/5 flex justify-between items-center z-10 relative bg-black/20">
+                            <div class="flex items-center gap-3">
+                                <h2 class="font-heading text-lg font-bold flex items-center gap-2">
+                                    <i data-lucide="terminal" class="h-5 w-5 text-velyon-cyan"></i> Your Generated Prompt
+                                </h2>
+                                <div id="prompt-status"></div>
+                            </div>
+                            <button onclick="copyPrompt()" id="copy-btn" class="hover:bg-white/10 px-3 py-2 rounded-md transition-colors flex items-center gap-2 cursor-pointer text-xs font-semibold border border-white/10 bg-white/5 text-velyon-offwhite active:scale-95">
+                                <i data-lucide="copy" class="h-3.5 w-3.5"></i> Copy
+                            </button>
+                        </div>
+                        
+                        <!-- Code Area -->
+                        <div class="relative z-10 flex-grow bg-[#0A0A0A] overflow-hidden flex flex-col">
+                            <div class="px-4 py-2 bg-gradient-to-r from-black/80 to-transparent border-b border-white/5 flex items-center text-xs text-velyon-grey font-mono shrink-0">
+                                <div class="flex gap-1.5 mr-4">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                                </div>
+                                <span id="prompt-file-label">ultimate_builder.txt — fill in the form and click Generate</span>
+                            </div>
+<pre class="p-6 font-mono text-[13px] leading-relaxed overflow-x-auto overflow-y-auto scroll-smooth flex-grow" id="prompt-text" style="min-height:520px;"><span class="text-neutral-600">Fill in your project details on the left, then click</span>
+<span class="text-velyon-cyan font-semibold">⚡ Generate My Prompt</span>
+<span class="text-neutral-600">to build your complete, personalised AI prompt.</span>
+
+<span class="text-neutral-700">───────────────────────────────────────────</span>
+<span class="text-neutral-600">Your prompt will include:</span>
+
+<span class="text-green-300/60">✓  /ui skill orchestration</span>
+<span class="text-green-300/60">✓  ui-ux-pro-max design system</span>
+<span class="text-green-300/60">✓  21st.dev magic component builder</span>
+<span class="text-green-300/60">✓  All core requirements</span>
+<span class="text-purple-300/60">✓  Hero image generation (optional)</span>
+<span class="text-orange-200/60">✓  Copy &amp; messaging (optional)</span>
+<span class="text-pink-200/60">✓  Brand alignment (optional)</span>
+<span class="text-emerald-300/60">✓  Your chosen save location</span>
+
+<span class="text-neutral-700">───────────────────────────────────────────</span>
+<span class="text-neutral-600">Values you enter will appear in </span><span class="prompt-user-val">amber</span><span class="text-neutral-600">.</span>
+<span class="text-neutral-600">Unfilled placeholders appear in </span><span class="prompt-fill-val">cyan</span><span class="text-neutral-600">.</span></pre>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex items-center gap-5 mt-4 px-2">
+                        <div class="flex items-center gap-2 text-xs text-velyon-grey">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#FCD34D] inline-block"></span> Your values
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-velyon-grey">
+                            <span class="w-2.5 h-2.5 rounded-full bg-velyon-cyan inline-block"></span> Unfilled placeholders
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-velyon-grey ml-auto">
+                            <i data-lucide="info" class="h-3.5 w-3.5"></i> Copy button copies plain text
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Tools & Skills Reference -->
+        <section class="container mx-auto px-6 max-w-7xl pt-24">
+            <div class="glass-card rounded-2xl p-8 lg:p-10 relative overflow-hidden border-white/5">
+                <h2 class="font-heading text-2xl font-bold mb-8 flex items-center gap-3">
+                    <i data-lucide="blocks" class="h-7 w-7 text-velyon-cyan"></i> Skills &amp; MCP Tools Activated
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm font-body border-collapse min-w-[600px]">
+                        <thead>
+                            <tr class="border-b border-white/10 text-velyon-grey uppercase tracking-wider text-xs font-semibold">
+                                <th class="pb-4 px-4 w-1/3">Tool / Skill</th>
+                                <th class="pb-4 px-4 w-2/3">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="py-5 px-4 font-mono text-velyon-cyan text-sm group-hover:text-white transition-colors">frontend-design <span class="text-velyon-grey font-body text-xs ml-1 opacity-60">skill</span></td>
+                                <td class="py-5 px-4 text-velyon-offwhite text-[15px]">Bold aesthetic direction, production-grade HTML/CSS/JS</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="py-5 px-4 font-mono text-velyon-cyan text-sm group-hover:text-white transition-colors">ui-ux-pro-max <span class="text-velyon-grey font-body text-xs ml-1 opacity-60">skill</span></td>
+                                <td class="py-5 px-4 text-velyon-offwhite text-[15px]">Design system: fonts, colours, spacing, effects</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="py-5 px-4 font-mono text-[#00F0FF] text-sm group-hover:text-white transition-colors">mcp_magic_21st_magic_component_builder</td>
+                                <td class="py-5 px-4 text-velyon-offwhite text-[15px]">Sourcing premium React/HTML UI components from 21st.dev</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="py-5 px-4 font-mono text-velyon-cyan text-sm group-hover:text-white transition-colors">generate_image <span class="text-velyon-grey font-body text-xs ml-1 opacity-60">tool</span></td>
+                                <td class="py-5 px-4 text-velyon-offwhite text-[15px]">AI-generated hero images (optional)</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="py-5 px-4 font-mono text-velyon-cyan text-sm group-hover:text-white transition-colors">copywriting <span class="text-velyon-grey font-body text-xs ml-1 opacity-60">skill</span></td>
+                                <td class="py-5 px-4 text-velyon-offwhite text-[15px]">Compelling headline and CTA copy (optional)</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors group">
+                                <td class="py-5 px-4 font-mono text-velyon-cyan text-sm group-hover:text-white transition-colors">github <span class="text-velyon-grey font-body text-xs ml-1 opacity-60">MCP</span></td>
+                                <td class="py-5 px-4 text-velyon-offwhite text-[15px]">Direct commit to GitHub repo (optional)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-velyon-obsidian/50 mt-20">
+        <div class="container mx-auto px-6 py-12 max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-2">
+                <img src="./velyon-logo-web-site-image.png" alt="VELYON Logo" class="h-6 w-auto object-contain opacity-80" onerror="this.src='https://placehold.co/120x40/0A0A0A/F5F5F5.png?text=VELYON'">
+            </div>
+            <p class="font-body text-sm text-velyon-grey">Built using the Ultimate HTML Builder Prompt.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Init icons
+        lucide.createIcons();
+
+        // ─── State ───
+        let currentSaveOpt = 'A';
+        window._generatedPromptPlain = null;
+
+        // ─── Save Option Selection ───
+        function selectSaveOpt(opt) {
+            currentSaveOpt = opt;
+            ['A','B','C','D'].forEach(o => {
+                document.getElementById('opt-label-' + o).classList.toggle('active', o === opt);
+                document.getElementById('radio-' + o).checked = (o === opt);
+            });
+            // Show/hide field groups
+            document.getElementById('fields-A').classList.toggle('hidden', opt !== 'A' && opt !== 'D');
+            document.getElementById('fields-B').classList.toggle('hidden', opt !== 'B' && opt !== 'D');
+            document.getElementById('fields-C').classList.toggle('hidden', opt !== 'C' && opt !== 'D');
+        }
+
+        // ─── HTML Escape Helper ───
+        function esc(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        // ─── Value Resolver ───
+        // Returns {html, plain} — amber if user supplied, cyan if placeholder
+        function getVal(id, fallback) {
+            const v = (document.getElementById(id)?.value || '').trim();
+            if (v) {
+                return {
+                    html:  `<span class="prompt-user-val">${esc(v)}</span>`,
+                    plain: v
+                };
+            }
+            return {
+                html:  `<span class="prompt-fill-val">${esc(fallback)}</span>`,
+                plain: fallback
+            };
+        }
+
+        // ─── Colour helpers (return [html, plain]) ───
+        const DIV = () => [`<span class="text-neutral-700">───────────────────────────────────────────</span>`, `───────────────────────────────────────────`];
+        const HDR = t => [`<span class="font-bold text-white tracking-widest">${esc(t)}</span>`, t];
+        const W   = t => [`<span class="text-neutral-200">${esc(t)}</span>`, t];
+        const GRN = t => [`<span class="text-green-300">${esc(t)}</span>`, t];
+        const YLW = t => [`<span class="text-yellow-300">${esc(t)}</span>`, t];
+        const PRP = t => [`<span class="text-purple-300">${esc(t)}</span>`, t];
+        const ORG = t => [`<span class="text-orange-200">${esc(t)}</span>`, t];
+        const PNK = t => [`<span class="text-pink-200">${esc(t)}</span>`, t];
+        const EM  = t => [`<span class="text-emerald-300 font-semibold">${esc(t)}</span>`, t];
+        const EC  = t => [`<span class="text-emerald-100">${esc(t)}</span>`, t];
+        const IT  = t => [`<span class="text-neutral-500 italic">${esc(t)}</span>`, t];
+
+        // ─── Main Generate Function ───
+        function generatePrompt() {
+            const productRaw = (document.getElementById('field-product')?.value || '').trim();
+            if (!productRaw) {
+                const el = document.getElementById('field-product');
+                el.style.borderColor = 'rgba(239,68,68,0.6)';
+                el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.12)';
+                el.focus();
+                setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2200);
+                return;
+            }
+
+            // Resolve all values
+            const pProduct  = getVal('field-product',    '[YOUR PRODUCT/PAGE DESCRIPTION HERE]');
+            const pCompany  = getVal('field-company',    '[YOUR COMPANY]');
+            const pLogo     = getVal('field-logo',       '[YOUR COMPANY LOGO]');
+            const pPage     = getVal('field-page-name',  '[page-name]');
+            const pSub      = getVal('field-subfolder',  '[subfolder]');
+            const pDrive    = getVal('field-drive-folder','[Your Folder]');
+            const pGhUser   = getVal('field-github-user','[your-github-username]');
+            const pGhRepo   = getVal('field-github-repo','[your-repo-name]');
+
+            const inclHero  = document.getElementById('toggle-hero').checked;
+            const inclCopy  = document.getElementById('toggle-copy').checked;
+            const inclBrand = document.getElementById('toggle-brand').checked;
+            const opt = currentSaveOpt;
+
+            // Build output
+            const htmlLines  = [];
+            const plainLines = [];
+
+            function add(html, plain) {
+                htmlLines.push(html);
+                plainLines.push(plain !== undefined ? plain : html.replace(/<[^>]+>/g, ''));
+            }
+            function addP(...parts) {
+                // parts = alternating [html, plain] pairs joined together
+                let h = '', p = '';
+                for (const part of parts) {
+                    if (Array.isArray(part)) { h += part[0]; p += part[1]; }
+                    else { h += part.html; p += part.plain; }
+                }
+                add(h, p);
+            }
+            function blank() { add('', ''); }
+
+            // ── Opening line ──
+            add(
+                `<span class="text-pink-400">/ui</span> ${W('Use the')[0]} ${GRN('frontend-design')[0]} ${W('skill,')[0]} ${GRN('ui-ux-pro-max')[0]} ${W('skill, and')[0]} ${YLW('mcp_magic_21st_magic_component_builder')[0]}`,
+                `/ui Use the frontend-design skill, ui-ux-pro-max skill, and mcp_magic_21st_magic_component_builder`
+            );
+            add(
+                `${W('to build me a premium, single-file HTML landing page for')[0]} ${pProduct.html}${W('.')[0]}`,
+                `to build me a premium, single-file HTML landing page for ${pProduct.plain}.`
+            );
+            blank();
+
+            // ── Core Requirements ──
+            add(...DIV()); add(...HDR('CORE REQUIREMENTS')); add(...DIV());
+            [
+                `- Single self-contained .html file with all CSS and JS inline`,
+                `- Use the ui-ux-pro-max design system script to generate the full design system first:`,
+                `  python3 skills/ui-ux-pro-max/scripts/search.py "super modern, super high tech, Silicon Valley, AI developer/ AI marketing agency" --design-system`,
+                `- Use 21st_magic_component_builder to source UI components (hero, cards, nav, CTA, etc.)`,
+                `- Apply frontend-design principles: bold aesthetic direction, distinctive fonts`,
+                `  (NOT Inter/Roboto/Arial), micro-animations, atmospheric backgrounds, unexpected layouts`,
+                `- Dark mode premium aesthetic with glassmorphism and depth`,
+                `- Fully responsive: 375px, 768px, 1024px, 1440px breakpoints`,
+                `- SVG icons only (Heroicons/Lucide style) — no emojis as icons`,
+                `- Smooth CSS transitions (150–300ms) on all interactive elements`,
+                `- Google Fonts via CDN (pick something distinctive and appropriate)`,
+                `- Pre-delivery checklist verified: contrast, hover states, cursor-pointer, no layout shift`,
+            ].forEach(l => add(W(l)[0], l));
+            blank();
+
+            // ── Optional: Hero Images ──
+            if (inclHero) {
+                add(...DIV()); add(...HDR('GENERATE HERO IMAGES')); add(...DIV());
+                add(PRP('- Use the generate_image tool to create real images for the hero and any visual sections')[0],
+                    `- Use the generate_image tool to create real images for the hero and any visual sections`);
+                add(PRP('- No placeholder images — generate all visuals from scratch to match the design aesthetic')[0],
+                    `- No placeholder images — generate all visuals from scratch to match the design aesthetic`);
+                add(
+                    `${PRP('- Insert the')[0]} ${pLogo.html} ${PRP('when necessary and appropriate.')[0]}`,
+                    `- Insert the ${pLogo.plain} when necessary and appropriate.`
+                );
+                blank();
+            }
+
+            // ── Optional: Copy & Messaging ──
+            if (inclCopy) {
+                add(...DIV()); add(...HDR('COPY & MESSAGING')); add(...DIV());
+                add(ORG('- Use the copywriting skill to write all headlines, subheadings, and CTA copy')[0],
+                    `- Use the copywriting skill to write all headlines, subheadings, and CTA copy`);
+                add(ORG('- Messaging should be benefit-led, punchy, and conversion-focused')[0],
+                    `- Messaging should be benefit-led, punchy, and conversion-focused`);
+                blank();
+            }
+
+            // ── Optional: Brand Alignment ──
+            if (inclBrand) {
+                add(...DIV()); add(...HDR('BRAND ALIGNMENT')); add(...DIV());
+                add(
+                    `${PNK('- All .html pages must conform to')[0]} ${pCompany.html} ${PNK('BRAND DESIGN SYSTEM &amp;')[0]} ${pCompany.html} ${PNK('BRAND KIT &amp; STYLE GUIDE')[0]}`,
+                    `- All .html pages must conform to ${pCompany.plain} BRAND DESIGN SYSTEM & ${pCompany.plain} BRAND KIT & STYLE GUIDE`
+                );
+                blank();
+            }
+
+            // ── Save Location ──
+            add(...DIV()); add(...HDR('SAVE LOCATION — YOUR CHOSEN OPTION')); add(...DIV());
+
+            if (opt === 'A' || opt === 'D') {
+                add(...EM('[OPTION A – LOCAL WORKSPACE]'));
+                add(...W('Save the completed file to:'));
+                add(
+                    `${EC('c:\\ANTIGRAVITY PROJECTS\\VELYON - LEGAL COMMAND CENTER\\')[0]}${pSub.html}${EC('\\')[0]}${pPage.html}${EC('.html')[0]}`,
+                    `c:\\ANTIGRAVITY PROJECTS\\VELYON - LEGAL COMMAND CENTER\\${pSub.plain}\\${pPage.plain}.html`
+                );
+                blank();
+            }
+            if (opt === 'B' || opt === 'D') {
+                add(...EM('[OPTION B – GOOGLE DRIVE]'));
+                add(...W('Save the completed file to your synced Google Drive folder:'));
+                add(
+                    `${EC('G:\\My Drive\\')[0]}${pDrive.html}${EC('\\')[0]}${pPage.html}${EC('.html')[0]}`,
+                    `G:\\My Drive\\${pDrive.plain}\\${pPage.plain}.html`
+                );
+                add(...IT('(Adjust the drive letter if your Google Drive maps differently — check in File Explorer)'));
+                blank();
+            }
+            if (opt === 'C' || opt === 'D') {
+                add(...EM('[OPTION C – GITHUB REPO]'));
+                add(...W('Commit the completed file directly to your GitHub repository using the github MCP tool:'));
+                add(`${EC('- Repo owner: ')[0]}${pGhUser.html}`, `- Repo owner: ${pGhUser.plain}`);
+                add(`${EC('- Repo name: ')[0]}${pGhRepo.html}`, `- Repo name: ${pGhRepo.plain}`);
+                add(...EC('- Branch: main'));
+                add(`${EC('- File path in repo: pages/')[0]}${pPage.html}${EC('.html')[0]}`, `- File path in repo: pages/${pPage.plain}.html`);
+                add(`${EC('- Commit message: "Add ')[0]}${pPage.html}${EC(' landing page"')[0]}`, `- Commit message: "Add ${pPage.plain} landing page"`);
+                blank();
+            }
+            if (opt === 'D') {
+                add(...EM('[OPTION D – ALL OF THE ABOVE]'));
+                add(...W('Save locally AND push to GitHub AND sync via Google Drive.'));
+            }
+
+            // ── Store & Render ──
+            window._generatedPromptPlain = plainLines.join('\n').trim();
+            document.getElementById('prompt-text').innerHTML = htmlLines.join('\n');
+            document.getElementById('prompt-file-label').textContent = 'your_prompt.txt — generated ✓';
+
+            // Status badge
+            document.getElementById('prompt-status').innerHTML = `
+                <span class="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded-full">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>Generated
+                </span>`;
+
+            // Button feedback
+            const btn = document.getElementById('generate-btn');
+            btn.classList.add('success');
+            btn.innerHTML = '<i data-lucide="check-circle" class="h-5 w-5"></i> Prompt Generated!';
+            lucide.createIcons();
+            setTimeout(() => {
+                btn.classList.remove('success');
+                btn.innerHTML = '<i data-lucide="zap" class="h-5 w-5"></i> Regenerate Prompt';
+                lucide.createIcons();
+            }, 2500);
+
+            // Scroll to prompt output on mobile
+            if (window.innerWidth < 1024) {
+                setTimeout(() => {
+                    document.getElementById('prompt-text').closest('.glass-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
+        // ─── Copy Function ───
+        function copyPrompt() {
+            const text = window._generatedPromptPlain || document.getElementById('prompt-text').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="h-3.5 w-3.5 text-velyon-cyan"></i> <span class="text-velyon-cyan">Copied!</span>';
+                lucide.createIcons();
+                setTimeout(() => { btn.innerHTML = orig; lucide.createIcons(); }, 2000);
+            });
+        }
+
+        // ─── Fade-in animations ───
+        document.addEventListener('DOMContentLoaded', () => {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to   { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in-up {
+                    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                    opacity: 0;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
